@@ -39,6 +39,8 @@ const fieldSelectArray = {
   <option value="ppl_rsum">People R Sum</option>`,
 }
 
+const heatmapData = "https://twin-web.gate-ai.eu/backend-proxy/heatMapData"; //ExEa data from apache endpoint
+
 //функции getMean и average - для осреднения значения для графика
 const getMean = (arr, featureName) => Object.keys(arr).map(key => {
   return [key, arr[key].reduce((a, b) => a + (b[featureName] || 0), 0)/arr[key].length]
@@ -444,6 +446,7 @@ map.on("load", async function () {
 	addSource(map, 'sensorsPedHistory', walkingDataSource);
 	addSource(map, 'subwaySource', subwaySource);
   	addSource(map, 'busStopSource', busStopSource);
+	addSource(map, 'heatmapData', heatmapData);
   
 
 	map.addLayer({
@@ -655,10 +658,33 @@ map.on("load", async function () {
 	  }
 	});
 
+	map.addLayer({
+        id: 'heatmap-layer',
+        type: 'heatmap',
+        source: 'heatmapData',
+        paint: {
+            'heatmap-radius': 20, // Adjust the radius as needed
+            'heatmap-opacity': 0.7, // Adjust the opacity
+            'heatmap-intensity': 2, // Adjust the intensity
+            'heatmap-color': [
+                'interpolate',
+                ['linear'],
+                ['heatmap-density'],
+                0, 'rgba(0, 0, 255, 0)',
+                0.2, 'royalblue',
+                0.4, 'cyan',
+                0.6, 'lime',
+                0.8, 'yellow',
+                1, 'red'
+            ]
+        }
+    })
+
 	addLabelLayer(map, "bus-stop", "busStopSource", "name", '#8a8888',  visibility='none');
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
+	addLabelLayer(map, "heatmap", "heatmapData", "value", visibility='none')
 
 	sourceBtnArr.forEach((btn) => {
 		btn.addEventListener("click", async (e) => {
