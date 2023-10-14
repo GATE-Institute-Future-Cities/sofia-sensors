@@ -19,6 +19,7 @@ const walkingDataSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/m
 const citylabDevice = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/citylab_sensors.geojson';
 const subwaySource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/railway_subway_entrance.geojson';
 const busStopSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/stops_2020_4326.geojson';
+const heatmapData = "https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/heatmap.geojson"; //ExEa heatmap demo data 
 let activeLayer = 'TEMP-layer';
 let activeSource = 'airthings';
 let selectedTime = '2023-03-13T09:00:00';
@@ -39,7 +40,6 @@ const fieldSelectArray = {
   <option value="ppl_rsum">People R Sum</option>`,
 }
 
-const heatmapData = "https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/heatmap.geojson"; //ExEa data from apache endpoint
 
 //функции getMean и average - для осреднения значения для графика
 const getMean = (arr, featureName) => Object.keys(arr).map(key => {
@@ -687,7 +687,7 @@ map.on("load", async function () {
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
-	addLabelLayer(map, "heatmap", "heatmapData", "name", '#ffffff', visibility='none');
+	addLabelLayer(map, "heatmap", "heatmapData", visibility='none');
 
 	sourceBtnArr.forEach((btn) => {
 		btn.addEventListener("click", async (e) => {
