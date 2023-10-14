@@ -39,7 +39,7 @@ const fieldSelectArray = {
   <option value="ppl_rsum">People R Sum</option>`,
 }
 
-const heatmapData = "https://twin-web.gate-ai.eu/backend-proxy/heatMapData"; //ExEa data from apache endpoint
+const heatmapData = "https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/heatmap.geojson"; //ExEa data from apache endpoint
 
 //функции getMean и average - для осреднения значения для графика
 const getMean = (arr, featureName) => Object.keys(arr).map(key => {
@@ -659,10 +659,13 @@ map.on("load", async function () {
 	});
 
 	map.addLayer({
-        id: 'heatmap-layer',
-        type: 'heatmap',
-        source: 'heatmapData',
-        paint: {
+        'id': 'heatmap-layer',
+        'type': 'heatmap',
+        'source': 'heatmapData',
+		'layout': {
+			'visibility':'none'
+		},
+        'paint': {
             'heatmap-radius': 20, // Adjust the radius as needed
             'heatmap-opacity': 0.7, // Adjust the opacity
             'heatmap-intensity': 2, // Adjust the intensity
@@ -684,7 +687,7 @@ map.on("load", async function () {
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
-	addLabelLayer(map, "heatmap", "heatmapData", "value", visibility='none')
+	addLabelLayer(map, "heatmap", "heatmapData", "name", '#ffffff', visibility='none');
 
 	sourceBtnArr.forEach((btn) => {
 		btn.addEventListener("click", async (e) => {
