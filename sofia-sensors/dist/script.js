@@ -40,7 +40,6 @@ const fieldSelectArray = {
   <option value="ppl_rsum">People R Sum</option>`,
 }
 
-
 //функции getMean и average - для осреднения значения для графика
 const getMean = (arr, featureName) => Object.keys(arr).map(key => {
   return [key, arr[key].reduce((a, b) => a + (b[featureName] || 0), 0)/arr[key].length]
@@ -59,6 +58,21 @@ const showSatelliteLayer = (layer) => {
 	const visibleOption = layerId === "satellite" ? "visible": "none";
 	map.setLayoutProperty("satellite", 'visibility', visibleOption);
 }
+
+//function to covert values into colors
+const interpolateColor = (value) => {
+	const minValue = 0;
+	const maxValue = 1;
+	const minColor = 'blue';
+	const maxColor = 'red';
+	
+	const colorScale = d3.scaleSequential(d3.interpolate(minColor, maxColor));
+	
+	// Normalize the value to the [0, 1] range
+	const normalizedValue = (value - minValue) / (maxValue - minValue);
+	
+	return colorScale(normalizedValue);
+  }
 
 const showUrbanLayer = (layer) => {
 	const clickedLayer = layer.target.value;
@@ -416,6 +430,25 @@ const plotCityLab = async() => {
 		}, {});
 }
 
+fetch(heatmapData)
+  .then(response => response.json()) // Parse the response as JSON
+  .then(data => {
+    // Now you can access the 'features' property in the GeoJSON data
+    const features = data.features;
+
+    // Loop through the features
+    for (const feature of features) {
+        const value = parseFloat(feature.properties.value);
+		const color = interpolateColor(value);
+		feature.properties.color = color;
+    }
+	
+  })
+  .catch(error => {
+    console.error("Error fetching or parsing the GeoJSON data:", error);
+  });
+
+
 //инициализация контейнера для графика
 let allSensorsChart = echarts.init(dom, null, {
 	renderer: "canvas",
@@ -673,15 +706,18 @@ map.on("load", async function () {
                 'interpolate',
                 ['linear'],
                 ['heatmap-density'],
+				['get', "color"],
                 0, 'rgba(0, 0, 255, 0)',
                 0.2, 'royalblue',
                 0.4, 'cyan',
                 0.6, 'lime',
                 0.8, 'yellow',
-                1, 'red'
+                1, 'red',
             ]
         }
     })
+
+	
 
 	addLabelLayer(map, "bus-stop", "busStopSource", "name", '#8a8888',  visibility='none');
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
@@ -790,7 +826,7 @@ map.on("load", async function () {
 	  ];
   
 	  let features = map.queryRenderedFeatures(bbox, {
-		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer'], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
+		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer', 'heatmap-layer'], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
 	  });
   
 	  if (map.getLayer("selected-sensor")) {
