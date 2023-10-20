@@ -19,7 +19,7 @@ const walkingDataSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/m
 const citylabDevice = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/citylab_sensors.geojson';
 const subwaySource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/railway_subway_entrance.geojson';
 const busStopSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/stops_2020_4326.geojson';
-const heatmapData = "https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/modified-heatmap.geojson"; //ExEa heatmap demo data 
+const heatmapData = "https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/heatmap_geojson_file.geojson"; //ExEa heatmap demo data 
 let activeLayer = 'TEMP-layer';
 let activeSource = 'airthings';
 let selectedTime = '2023-03-13T09:00:00';
@@ -682,71 +682,68 @@ map.on("load", async function () {
 			'visibility':'none'
 		},
 		'paint': {
-				// Increase the heatmap weight based on frequency and property magnitude
-				'heatmap-weight': [
-					'interpolate',
-					['linear'],
-					['get', 'value'],
-					0,
-					0.00051249,
-					3.2737,
-					1
-				],
-				// Increase the heatmap color weight weight by zoom level
-				// heatmap-intensity is a multiplier on top of heatmap-weight
-				'heatmap-intensity': [
-					'interpolate',
-					['linear'],
-					['zoom'],
-					0,
-					1,
-					9,
-					3
-				],
-				// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-				// Begin color ramp at 0-stop with a 0-transparancy color
-				// to create a blur-like effect.
-				'heatmap-color': [
-					'interpolate',
-					['linear'],
-					['heatmap-density'],
-					0,
-					'rgba(33,102,172,0)',
-					0.2,
-					'rgb(103,169,207)',
-					0.4,
-					'rgb(209,229,240)',
-					0.6,
-					'rgb(253,219,199)',
-					0.8,
-					'rgb(239,138,98)',
-					1,
-					'rgb(178,24,43)'
-				],
-				// Adjust the heatmap radius by zoom level
-				'heatmap-radius': [
-					'interpolate',
-					['linear'],
-					['zoom'],
-					0,
-					2,
-					9,
-					20
-				],
-				// Transition from heatmap to circle layer by zoom level
-				'heatmap-opacity': [
-					'interpolate',
-					['linear'],
-					['zoom'],
-					7,
-					1,
-					9,
-					0
-				]
-			}
-		},
-		'waterway'
-	);
+			// Increase the heatmap weight based on value 
+			'heatmap-weight': [
+				'interpolate',
+				['linear'],
+				['get', 'value'],
+				0,
+				0.00051249,
+				3.2737,
+				1
+			],
+			// Increase the heatmap color weight weight by zoom level
+			// heatmap-intensity is a multiplier on top of heatmap-weight
+			'heatmap-intensity': [
+				'interpolate',
+				['linear'],
+				['zoom'],
+				0,
+				1,
+				9,
+				3
+			],
+			// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+			// Begin color ramp at 0-stop with a 0-transparancy color
+			// to create a blur-like effect.
+			'heatmap-color': [
+				'interpolate',
+				['linear'],
+				['heatmap-density'],
+				0,
+				'rgba(33,102,172,0)',
+				0.2,
+				'rgb(103,169,207)',
+				0.4,
+				'rgb(209,229,240)',
+				0.6,
+				'rgb(253,219,199)',
+				0.8,
+				'rgb(239,138,98)',
+				1,
+				'rgb(178,24,43)'
+			],
+			// Adjust the heatmap radius by zoom level
+			'heatmap-radius': [
+				'interpolate',
+				['linear'],
+				['zoom'],
+				0,
+				2,
+				9,
+				20
+			],
+			// Transition from heatmap to circle layer by zoom level
+			'heatmap-opacity': [
+				'interpolate',
+				['linear'],
+				['zoom'],
+				7,
+				1,
+				9,
+				0
+			]
+		}});
 
 	map.addLayer(
 		{
@@ -755,35 +752,34 @@ map.on("load", async function () {
 			'source': 'heatmapData',
 			'layout': {
 				'visibility':'none'
-			},
+			  },
 			'minzoom': 7,
+
 			'paint': {
-				// Size circle radius by earthquake magnitude and zoom level
 				'circle-radius': [
 					'interpolate',
 					['linear'],
 					['zoom'],
-					7,
+					1,
 					['interpolate', ['linear'], ['get', 'value'], 1, 1, 6, 4],
-					16,
+					2,
 					['interpolate', ['linear'], ['get', 'value'], 1, 5, 6, 50]
 				],
-				// Color circle by earthquake magnitude
 				'circle-color': [
 					'interpolate',
 					['linear'],
 					['get', 'value'],
-					1,
+					0.1,
 					'rgba(33,102,172,0)',
-					2,
+					0.2,
 					'rgb(103,169,207)',
-					3,
+					0.3,
 					'rgb(209,229,240)',
-					4,
+					0.4,
 					'rgb(253,219,199)',
-					5,
+					0.5,
 					'rgb(239,138,98)',
-					6,
+					0.6,
 					'rgb(178,24,43)'
 				],
 				'circle-stroke-color': 'white',
@@ -802,14 +798,15 @@ map.on("load", async function () {
 		},
 		'waterway'
 	);
-	
+    
+
 
 	addLabelLayer(map, "bus-stop", "busStopSource", "name", '#8a8888',  visibility='none');
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
 	addLabelLayer(map, "heatmap", "heatmapData", "color", '#737272',visibility='none');
-	addLabelLayer(map, "heatmap-point", "heatmapData", "color", '#737272',visibility='none');
+	addLabelLayer(map, "heatmap-point", "heatmapData", "value", '#737272',visibility='none');
 
 	sourceBtnArr.forEach((btn) => {
 		btn.addEventListener("click", async (e) => {
