@@ -678,9 +678,7 @@ map.on("load", async function () {
         'id': 'heatmap-layer',
         'type': 'heatmap',
         'source': 'heatmapData',
-		'layout': {
-			'visibility':'none'
-		},
+		
 		'paint': {
 			// Increase the heatmap weight based on value 
 			'heatmap-weight': [
@@ -700,7 +698,7 @@ map.on("load", async function () {
 				['zoom'],
 				0,
 				1,
-				9,
+				2,
 				3
 			],
 			// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
@@ -729,9 +727,9 @@ map.on("load", async function () {
 				['linear'],
 				['zoom'],
 				0,
-				2,
-				9,
-				20
+				1,
+				3,
+				4
 			],
 			// Transition from heatmap to circle layer by zoom level
 			'heatmap-opacity': [
@@ -750,9 +748,7 @@ map.on("load", async function () {
 			'id': 'heatmap-point-layer',
 			'type': 'circle',
 			'source': 'heatmapData',
-			'layout': {
-				'visibility':'none'
-			  },
+
 			'minzoom': 7,
 
 			'paint': {
@@ -763,7 +759,7 @@ map.on("load", async function () {
 					1,
 					['interpolate', ['linear'], ['get', 'value'], 1, 1, 6, 4],
 					2,
-					['interpolate', ['linear'], ['get', 'value'], 1, 5, 6, 50]
+					['interpolate', ['linear'], ['get', 'value'], 1, 3, 4, 10]
 				],
 				'circle-color': [
 					'interpolate',
