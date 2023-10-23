@@ -59,20 +59,6 @@ const showSatelliteLayer = (layer) => {
 	map.setLayoutProperty("satellite", 'visibility', visibleOption);
 }
 
-//function to covert values into colors
-const interpolateColor = (value) => {
-	const minValue = 0.00051249;
-	const maxValue = 3.2737;
-	const minColor = 'blue';
-	const maxColor = 'red';
-	
-	const colorScale = d3.scaleSequential(d3.interpolate(minColor, maxColor));
-	
-	// Normalize the value to the [0, 1] range
-	const normalizedValue = (value - minValue) / (maxValue - minValue);
-	
-	return colorScale(normalizedValue);
-  }
 
 const showUrbanLayer = (layer) => {
 	const clickedLayer = layer.target.value;
