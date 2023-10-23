@@ -675,19 +675,21 @@ map.on("load", async function () {
 	});
 
 	map.addLayer({
-        'id': 'heatmap-layer',
-        'type': 'heatmap',
-        'source': 'heatmapData',
-		
+		'id': 'airquality-heat-layer',
+		'type': 'heatmap',
+		'source': 'heatmapData',
+		'layout': {
+			'visibility':'none'
+		  },
 		'paint': {
-			// Increase the heatmap weight based on value 
+			// Increase the heatmap weight based on property value
 			'heatmap-weight': [
 				'interpolate',
 				['linear'],
 				['get', 'value'],
 				0,
 				0,
-				4,
+				3.3,
 				1
 			],
 			// Increase the heatmap color weight weight by zoom level
@@ -695,10 +697,11 @@ map.on("load", async function () {
 			'heatmap-intensity': [
 				'interpolate',
 				['linear'],
+				['zoom'],
 				0,
-				1,
-				2,
-				3
+				10,
+				20,
+				1
 			],
 			// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
 			// Begin color ramp at 0-stop with a 0-transparancy color
@@ -708,85 +711,39 @@ map.on("load", async function () {
 				['linear'],
 				['heatmap-density'],
 				0,
-				'rgb(0, 0, 255)',
+				'rgba(0, 0, 0, 0)',
 				0.2,
-				'rgb(65, 105, 225)',
+				'rgb(65, 105, 225)', //royal blue
 				0.4,
-				'rgb(0, 100, 100)',
+				'rgb(0, 255, 255)', // cyan
 				0.6,
-				'rgb(50, 205, 50)',
+				'rgb(50, 205, 50)', // lime
 				0.8,
-				'rgb(255, 255, 0)',
+				'rgb(255, 255, 0)', // yellow
 				1,
-				'rgb(255, 0, 0)'
+				'rgb(255, 0, 0)' //red
 			],
 			// Adjust the heatmap radius by zoom level
 			'heatmap-radius': [
 				'interpolate',
 				['linear'],
+				['get', 'value'],
 				0,
-				10,
 				20,
-				30
+				3,
+				50
 			],
-
-		}});
-
-	map.addLayer(
-		{
-			'id': 'heatmap-point-layer',
-			'type': 'circle',
-			'source': 'heatmapData',
-			'paint': {
-				'circle-radius': [
-					'interpolate',
-					['linear'],
-					['zoom'],
-					1,
-					['interpolate', ['linear'], ['get', 'value'], 1, 10, 2, 20],
-					2,
-					['interpolate', ['linear'], ['get', 'value'], 1, 10, 2, 20]
-				],
-				'circle-color': [
-					'interpolate',
-					['linear'],
-					['get', 'value'],
-					0.1,
-					'rgba(33,102,172,0)',
-					0.2,
-					'rgb(103,169,207)',
-					0.3,
-					'rgb(209,229,240)',
-					0.4,
-					'rgb(253,219,199)',
-					0.5,
-					'rgb(239,138,98)',
-					0.6,
-					'rgb(178,24,43)'
-				],
-				// Transition from heatmap to circle layer by zoom level
-				'circle-opacity': [
-					'interpolate',
-					['linear'],
-					['zoom'],
-					1,
-					0,
-					2,
-					1
-				]
-			}
-		},
-		'waterway'
+		}},
+			'waterway'
 	);
-    
+
 
 
 	addLabelLayer(map, "bus-stop", "busStopSource", "name", '#8a8888',  visibility='none');
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
-	addLabelLayer(map, "heatmap", "heatmapData", "color", '#737272',visibility='none');
-	addLabelLayer(map, "heatmap-point", "heatmapData", "value", '#737272',visibility='none');
+	addLabelLayer(map, "airquality-heat", "heatmapData", 'color', '#737272', visibility='none');
 
 	sourceBtnArr.forEach((btn) => {
 		btn.addEventListener("click", async (e) => {
@@ -889,7 +846,7 @@ map.on("load", async function () {
 	  ];
   
 	  let features = map.queryRenderedFeatures(bbox, {
-		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer', 'heatmap-layer'], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
+		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer', "airquality-heat-layer"], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
 	  });
   
 	  if (map.getLayer("selected-sensor")) {
