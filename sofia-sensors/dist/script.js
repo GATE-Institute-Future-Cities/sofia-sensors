@@ -686,8 +686,8 @@ map.on("load", async function () {
 				['linear'],
 				['get', 'value'],
 				0,
-				0.00051249,
-				3.2737,
+				0,
+				4,
 				1
 			],
 			// Increase the heatmap color weight weight by zoom level
@@ -695,7 +695,6 @@ map.on("load", async function () {
 			'heatmap-intensity': [
 				'interpolate',
 				['linear'],
-				['zoom'],
 				0,
 				1,
 				2,
@@ -709,38 +708,28 @@ map.on("load", async function () {
 				['linear'],
 				['heatmap-density'],
 				0,
-				'rgba(33,102,172,0)',
+				'rgb(0, 0, 255)',
 				0.2,
-				'rgb(103,169,207)',
+				'rgb(65, 105, 225)',
 				0.4,
-				'rgb(209,229,240)',
+				'rgb(0, 100, 100)',
 				0.6,
-				'rgb(253,219,199)',
+				'rgb(50, 205, 50)',
 				0.8,
-				'rgb(239,138,98)',
+				'rgb(255, 255, 0)',
 				1,
-				'rgb(178,24,43)'
+				'rgb(255, 0, 0)'
 			],
 			// Adjust the heatmap radius by zoom level
 			'heatmap-radius': [
 				'interpolate',
 				['linear'],
-				['zoom'],
 				0,
-				1,
-				3,
-				4
+				10,
+				20,
+				30
 			],
-			// Transition from heatmap to circle layer by zoom level
-			'heatmap-opacity': [
-				'interpolate',
-				['linear'],
-				['zoom'],
-				7,
-				1,
-				9,
-				0
-			]
+
 		}});
 
 	map.addLayer(
@@ -748,18 +737,15 @@ map.on("load", async function () {
 			'id': 'heatmap-point-layer',
 			'type': 'circle',
 			'source': 'heatmapData',
-
-			'minzoom': 7,
-
 			'paint': {
 				'circle-radius': [
 					'interpolate',
 					['linear'],
 					['zoom'],
 					1,
-					['interpolate', ['linear'], ['get', 'value'], 1, 1, 6, 4],
+					['interpolate', ['linear'], ['get', 'value'], 1, 10, 2, 20],
 					2,
-					['interpolate', ['linear'], ['get', 'value'], 1, 3, 4, 10]
+					['interpolate', ['linear'], ['get', 'value'], 1, 10, 2, 20]
 				],
 				'circle-color': [
 					'interpolate',
@@ -778,16 +764,14 @@ map.on("load", async function () {
 					0.6,
 					'rgb(178,24,43)'
 				],
-				'circle-stroke-color': 'white',
-				'circle-stroke-width': 1,
 				// Transition from heatmap to circle layer by zoom level
 				'circle-opacity': [
 					'interpolate',
 					['linear'],
 					['zoom'],
-					7,
+					1,
 					0,
-					8,
+					2,
 					1
 				]
 			}
