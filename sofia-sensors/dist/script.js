@@ -675,7 +675,7 @@ map.on("load", async function () {
 				['get', 'value'],
 				0,
 				0,
-				3.3,
+				3,
 				1
 			],
 			// Increase the heatmap color weight weight by zoom level
@@ -686,7 +686,7 @@ map.on("load", async function () {
 				['zoom'],
 				0,
 				10,
-				20,
+				15,
 				1
 			],
 			// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
@@ -715,9 +715,9 @@ map.on("load", async function () {
 				['linear'],
 				['get', 'value'],
 				0,
-				20,
+				30,
 				3,
-				50
+				30
 			],
 		}},
 			'waterway'
