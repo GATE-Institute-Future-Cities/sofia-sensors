@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map without Heatmap</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="/dist/interpolateHeatmapLayer.js"></script>
+</head>
+<body>
+
+<div id="map" style="width: 100vw; height: 100vh;"></div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibW9oaS1nYXRlIiwiYSI6ImNsbjRsdDhvcTAxeWgycXBmcTVjYjA4em4ifQ.yaTzeNt2gbG3Z_a-SkxmTQ';
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [23.355542, 42.694030],
+        zoom: 12,
+    });
+
+
+    map.on('load', () => {
+        const heatlayer = interpolateHeatmapLayer.create({
+            'roi': [
+                { lat: 42.826708, lon: 23.201345 },
+                { lat: 42.826708, lon: 23.509432 },
+                { lat: 42.57681, lon: 23.509432 },
+                { lat: 42.57681, lon: 23.201345 },
+                { lat: 42.826708, lon: 23.201345 }
+            ],
+            'source': 'https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/heatmap_geojson_file.geojson',
+            'layerId': 'interpolated-heatmap',
+            'opacity': 0.5,
+            'minValue': 0,
+            'maxValue': 1,
+            'p': 3,
+            'pointRadius': 0,
+            'fasterPointRadius': false,
+            'paint': {
+                // Increase the heatmap weight based on property value
+                'heatmap-weight': [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'value'],
+                    0,
+                    0,
+                    3,
+                    1
+                ],
+                // Increase the heatmap color weight weight by zoom level
+                // heatmap-intensity is a multiplier on top of heatmap-weight
+                'heatmap-intensity': [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    0,
+                    10,
+                    15,
+                    1
+                ],
+                // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                // Begin color ramp at 0-stop with a 0-transparancy color
+                // to create a blur-like effect.
+                'heatmap-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['heatmap-density'],
+                    0,
+                    'rgba(0, 0, 0, 0)',
+                    0.2,
+                    'rgb(65, 105, 225)', //royal blue
+                    0.4,
+                    'rgb(0, 255, 255)', // cyan
+                    0.6,
+                    'rgb(50, 205, 50)', // lime
+                    0.8,
+                    'rgb(255, 255, 0)', // yellow
+                    1,
+                    'rgb(255, 0, 0)' //red
+                ],
+            }
+        });
+
+        console.log('Heatmap layer created:', heatlayer);
+
+
+        map.addLayer(heatlayer);
+    });
+</script>
+
+</body>
+</html>

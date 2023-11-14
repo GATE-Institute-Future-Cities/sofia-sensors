@@ -660,23 +660,15 @@ map.on("load", async function () {
 	  }
 	});
 
-	const heatlayer = interpolateHeatmapLayer.create({
+	map.addLayer({
 		'id': 'airquality-heat-layer',
 		'type': 'heatmap',
 		'source': 'heatmapData',
 		'layout': {
 			'visibility':'none'
 		  },
-		'roi': [
-			{ lat: 42.826708, lon: 23.201345 },
-			{ lat: 42.826708, lon: 23.509432 },
-			{ lat: 42.57681, lon: 23.509432 },
-			{ lat: 42.57681, lon: 23.201345 },
-			{ lat: 42.826708, lon: 23.201345 }
-		],
-		// Copy the existing heatmap layer's paint properties
-		// Adjust the properties as needed for the interpolateHeatmapLayer
 		'paint': {
+			// Increase the heatmap weight based on property value
 			'heatmap-weight': [
 				'interpolate',
 				['linear'],
@@ -686,6 +678,8 @@ map.on("load", async function () {
 				3,
 				1
 			],
+			// Increase the heatmap color weight weight by zoom level
+			// heatmap-intensity is a multiplier on top of heatmap-weight
 			'heatmap-intensity': [
 				'interpolate',
 				['linear'],
@@ -695,6 +689,9 @@ map.on("load", async function () {
 				15,
 				1
 			],
+			// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+			// Begin color ramp at 0-stop with a 0-transparancy color
+			// to create a blur-like effect.
 			'heatmap-color': [
 				'interpolate',
 				['linear'],
@@ -712,6 +709,7 @@ map.on("load", async function () {
 				1,
 				'rgb(255, 0, 0)' //red
 			],
+			// Adjust the heatmap radius by zoom level
 			'heatmap-radius': [
 				'interpolate',
 				['linear'],
@@ -721,12 +719,10 @@ map.on("load", async function () {
 				3,
 				30
 			],
-		},
+		}},
+			'waterway'
+	);
 
-	});
-
-	map.addLayer(heatlayer)
-	
 
 
 	addLabelLayer(map, "bus-stop", "busStopSource", "name", '#8a8888',  visibility='none');
