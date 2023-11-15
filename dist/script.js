@@ -439,7 +439,34 @@ plotOption(activeSource, 'TEMP', selectedTime, selectedSensor)
 		selectedSensorChart.setOption(selectedOption)
 });
 
+const interpolatedPoints = async () => {
+	const response = await fetch(heatmapData);
+	const geoJsonData = await response.json()
 
+	//GET THE POINTS FROM THE GEOJSON DATA
+	const points = geoJsonData.features.map(feature => ({
+		lng: feature.geometry.coordinates[0],
+		lat: feature.geometry.coordinates[1],
+		val: feature.properties.value,
+	}));
+
+	const layer = interpolateHeatmapLayer.create({
+		points: points,
+		layerId: 'airquality-heat-layer',
+		roi: [
+		{lat: 42.826708, lon: 23.201345},
+		{lat: 42.826708, lon: 23.509432},
+		{lat: 42.57681, lon: 23.509432},
+		{lat: 42.57681, lon: 23.201345},
+		{lat: 42.826708, lon: 23.201345}
+		],
+		//minValue: 0.00035,
+		//maxValue: 3.5234
+	});
+
+	return layer
+
+}
 
 map.on("load", async function () {
 	addSource(map, 'sensorsCoords', dataSource2);
@@ -660,68 +687,7 @@ map.on("load", async function () {
 	  }
 	});
 
-	map.addLayer({
-		'id': 'airquality-heat-layer',
-		'type': 'heatmap',
-		'source': 'heatmapData',
-		'layout': {
-			'visibility':'none'
-		  },
-		'paint': {
-			// Increase the heatmap weight based on property value
-			'heatmap-weight': [
-				'interpolate',
-				['linear'],
-				['get', 'value'],
-				0,
-				0,
-				3,
-				1
-			],
-			// Increase the heatmap color weight weight by zoom level
-			// heatmap-intensity is a multiplier on top of heatmap-weight
-			'heatmap-intensity': [
-				'interpolate',
-				['linear'],
-				['zoom'],
-				0,
-				10,
-				15,
-				1
-			],
-			// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-			// Begin color ramp at 0-stop with a 0-transparancy color
-			// to create a blur-like effect.
-			'heatmap-color': [
-				'interpolate',
-				['linear'],
-				['heatmap-density'],
-				0,
-				'rgba(0, 0, 0, 0)',
-				0.2,
-				'rgb(65, 105, 225)', //royal blue
-				0.4,
-				'rgb(0, 255, 255)', // cyan
-				0.6,
-				'rgb(50, 205, 50)', // lime
-				0.8,
-				'rgb(255, 255, 0)', // yellow
-				1,
-				'rgb(255, 0, 0)' //red
-			],
-			// Adjust the heatmap radius by zoom level
-			'heatmap-radius': [
-				'interpolate',
-				['linear'],
-				['get', 'value'],
-				0,
-				30,
-				3,
-				30
-			],
-		}},
-			'waterway'
-	);
+	map.addLayer(interpolatedPoints());
 
 
 
