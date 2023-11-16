@@ -439,34 +439,34 @@ plotOption(activeSource, 'TEMP', selectedTime, selectedSensor)
 		selectedSensorChart.setOption(selectedOption)
 });
 
-const interpolatedPoints = async () => {
-	const response = await fetch(heatmapData);
-	const geoJsonData = await response.json()
+const addInterpolatedHeatmapLayer = (mapInstance, layerName, points, roi, visibility = 'visible') => {
+    const layer = interpolateHeatmapLayer.create({
+        points: points,
+        layerId: layerName,
+        roi: roi,
+        layout: {
+            visibility: visibility
+        },
+    });
+    mapInstance.addLayer(layer);
+};
 
-	//GET THE POINTS FROM THE GEOJSON DATA
-	const points = geoJsonData.features.map(feature => ({
-		lng: feature.geometry.coordinates[0],
-		lat: feature.geometry.coordinates[1],
-		val: feature.properties.value,
-	}));
 
-	const layer = interpolateHeatmapLayer.create({
-		points: points,
-		layerId: 'airquality-heat-layer',
-		roi: [
-		{lat: 42.826708, lon: 23.201345},
-		{lat: 42.826708, lon: 23.509432},
-		{lat: 42.57681, lon: 23.509432},
-		{lat: 42.57681, lon: 23.201345},
-		{lat: 42.826708, lon: 23.201345}
-		],
-		//minValue: 0.00035,
-		//maxValue: 3.5234
-	});
 
-	return layer
+async function fetchInterpolatedPoints() {
+    const response = await fetch(heatmapData);
+    const geoJsonData = await response.json();
 
+    // Extract points from GeoJSON features
+    const points = geoJsonData.features.map(feature => ({
+        lng: feature.geometry.coordinates[0],
+        lat: feature.geometry.coordinates[1],
+        val: feature.properties.value,
+    }));
+
+    return points;
 }
+
 
 map.on("load", async function () {
 	addSource(map, 'sensorsCoords', dataSource2);
@@ -687,7 +687,23 @@ map.on("load", async function () {
 	  }
 	});
 
-	map.addLayer(interpolatedPoints());
+	const interpolatedHeatPoints = fetchInterpolatedPoints();
+	const layer = interpolateHeatmapLayer.create({
+		points: interpolatedHeatPoints,
+		layerId: 'airquality-heat',
+		roi: [
+		{lat: 42.826708, lon: 23.201345},
+		{lat: 42.826708, lon: 23.509432},
+		{lat: 42.57681, lon: 23.509432},
+		{lat: 42.57681, lon: 23.201345},
+		{lat: 42.826708, lon: 23.201345}
+		],
+		'layout': {
+			'visibility':'none'
+		  },
+
+	});
+	map.addLayer(layer);
 
 
 
