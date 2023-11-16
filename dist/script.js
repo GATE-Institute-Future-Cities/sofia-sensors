@@ -12,6 +12,7 @@ const humidSensor = document.querySelector("#humidValue");
 const tempSensor = document.querySelector("#tempValue");
 const listContainer = document.querySelector('.sensordata__list');
 const legendBuilding = document.querySelector('.building-legend');
+const heatmapBtn = document.getElementById('heatMapbutton');
 
 const dataSource2 = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devicesLastHour.geojson';
 const historyDataSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devices_1mnth.geojson';
@@ -25,6 +26,7 @@ let activeSource = 'airthings';
 let selectedTime = '2023-03-13T09:00:00';
 let selectedSensor = 'AT22229480';
 let plotMain;
+let heatmapVisible = false; // Variable to track the visibility of the heatmap layer
 const sourceAlias = ['airthings', 'citylab'];
 const sourceArray = {
   "airthings": ['TEMP', 'NO2', 'SO2', 'HUMIDITY'],
@@ -84,6 +86,16 @@ const showUrbanLayer = (layer) => {
 		};
 	}
 };
+
+// Event listener for the heatmap toggle button
+heatmapBtn.addEventListener('click', () => {
+	heatmapVisible = !heatmapVisible; // Toggle the visibility state
+
+	const layerId = 'heatmap-layer';
+	const visibility = heatmapVisible ? 'visible' : 'none';
+
+	map.setLayoutProperty(layerId, 'visibility', visibility);
+});
 
 const addSource = (mapInstanse, name, jsonData) => {
 	return mapInstanse.addSource(name, {
@@ -675,6 +687,21 @@ map.on("load", async function () {
 	  }
 	});
 
+	const dataPoints = await fetchInterpolatedPoints();
+
+	const layer = interpolateHeatmapLayer.create({
+		points: dataPoints,
+		layerId: 'heatmap-layer',
+		roi: [
+			{lat: 42.826708, lon: 23.201345},
+			{lat: 42.826708, lon: 23.509432},
+			{lat: 42.57681, lon: 23.509432},
+			{lat: 42.57681, lon: 23.201345},
+			{lat: 42.826708, lon: 23.201345}
+		],
+	});
+
+	map.addLayer(layer);
 
 
 
@@ -683,6 +710,7 @@ map.on("load", async function () {
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
+
 
 	sourceBtnArr.forEach((btn) => {
 		btn.addEventListener("click", async (e) => {
@@ -785,7 +813,7 @@ map.on("load", async function () {
 	  ];
   
 	  let features = map.queryRenderedFeatures(bbox, {
-		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer'], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
+		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer', "airquality-heat-layer"], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
 	  });
   
 	  if (map.getLayer("selected-sensor")) {

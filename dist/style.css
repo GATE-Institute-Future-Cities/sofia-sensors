@@ -50,12 +50,22 @@ input[type="text"]:focus {
     overflow-y: hidden;
 }
 
-#heatmapToggle {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid black;
-  cursor: pointer;
+#heatMapbutton {
+    background: #fff;
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    right: 10px;
+    border-radius: 3px;
+    width: 100px;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    font-family: 'Open Sans', sans-serif;
+  }
+   
+
+#heatMapbutton:hover {
+  background: rgb(14, 73, 137);
+  color: #fff;
 }
+
+ 

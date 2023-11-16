@@ -66,10 +66,6 @@
 				<input id="subway" type="checkbox" name="radio" value="subway" class="additional-layer-item">
                 <label for="subway" class="ml-1 text-sm">Subway</label>
 			</li>
-			<li class="flex items-center mr-4 mb-2">
-				<input id="airquality-heat" type="checkbox" name="radio" value="airquality-heat" class="additional-layer-item">
-                <label for="airquality-heat" class="ml-1 text-sm">Heatmap</label>
-			</li>
 		</ul>
 		<p class="section-title font-sans font-medium text-base mt-3">
 			Sensors
@@ -115,9 +111,9 @@
 			  </ul> 
 		  </div>
 	</div>
+	<button id="heatMapbutton">Heat  Map</button>
 	<div class="map__container" id="map"></div>
 	<script src="/dist/interpolateHeatmapLayer.js"></script>
-	<button id="heatmapToggle">Toggle Heatmap</button>
 
 	<template id="item-template">
         <li class="info__item"></li>
