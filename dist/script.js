@@ -439,32 +439,20 @@ plotOption(activeSource, 'TEMP', selectedTime, selectedSensor)
 		selectedSensorChart.setOption(selectedOption)
 });
 
-const addInterpolatedHeatmapLayer = (mapInstance, layerName, points, roi, visibility = 'visible') => {
-    const layer = interpolateHeatmapLayer.create({
-        points: points,
-        layerId: layerName,
-        roi: roi,
-        layout: {
-            visibility: visibility
-        },
-    });
-    mapInstance.addLayer(layer);
-};
 
-
-
+// Fetch interpolated points 
 async function fetchInterpolatedPoints() {
     const response = await fetch(heatmapData);
     const geoJsonData = await response.json();
 
     // Extract points from GeoJSON features
-    const points = geoJsonData.features.map(feature => ({
+    heatmapPoints = geoJsonData.features.map(feature => ({
         lng: feature.geometry.coordinates[0],
         lat: feature.geometry.coordinates[1],
         val: feature.properties.value,
     }));
 
-    return points;
+    return heatmapPoints;
 }
 
 
@@ -687,23 +675,7 @@ map.on("load", async function () {
 	  }
 	});
 
-	const interpolatedHeatPoints = fetchInterpolatedPoints();
-	const layer = interpolateHeatmapLayer.create({
-		points: interpolatedHeatPoints,
-		layerId: 'airquality-heat',
-		roi: [
-		{lat: 42.826708, lon: 23.201345},
-		{lat: 42.826708, lon: 23.509432},
-		{lat: 42.57681, lon: 23.509432},
-		{lat: 42.57681, lon: 23.201345},
-		{lat: 42.826708, lon: 23.201345}
-		],
-		'layout': {
-			'visibility':'none'
-		  },
 
-	});
-	map.addLayer(layer);
 
 
 
@@ -711,7 +683,6 @@ map.on("load", async function () {
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
-	addLabelLayer(map, "airquality-heat", "heatmapData", 'color', '#737272', visibility='none');
 
 	sourceBtnArr.forEach((btn) => {
 		btn.addEventListener("click", async (e) => {
@@ -814,7 +785,7 @@ map.on("load", async function () {
 	  ];
   
 	  let features = map.queryRenderedFeatures(bbox, {
-		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer', "airquality-heat-layer"], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
+		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer'], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
 	  });
   
 	  if (map.getLayer("selected-sensor")) {

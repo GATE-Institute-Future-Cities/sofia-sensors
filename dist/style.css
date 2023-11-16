@@ -49,3 +49,13 @@ input[type="text"]:focus {
     height: 100vh;
     overflow-y: hidden;
 }
+
+#heatmapToggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid black;
+  cursor: pointer;
+}
