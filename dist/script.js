@@ -26,7 +26,6 @@ let activeSource = 'airthings';
 let selectedTime = '2023-03-13T09:00:00';
 let selectedSensor = 'AT22229480';
 let plotMain;
-let heatmapVisible = false; // Variable to track the visibility of the heatmap layer
 const sourceAlias = ['airthings', 'citylab'];
 const sourceArray = {
   "airthings": ['TEMP', 'NO2', 'SO2', 'HUMIDITY'],
@@ -676,34 +675,42 @@ map.on("load", async function () {
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
 
 	heatmapBtn.addEventListener('click', async () => {
-		const response = await fetch(heatmapData);
-		const geoJsonData = await response.json();
-
-		// Extract points from GeoJSON features
-		const points = geoJsonData.features.map(feature => ({
-			lng: feature.geometry.coordinates[0],
-			lat: feature.geometry.coordinates[1],
-			val: feature.properties.value,
-		}));
-
-		const layer = interpolateHeatmapLayer.create({
-			points: points,
-			layerId: 'airquality-heat',
-			roi: [
-			{lat: 42.826708, lon: 23.201345},
-			{lat: 42.826708, lon: 23.509432},
-			{lat: 42.57681, lon: 23.509432},
-			{lat: 42.57681, lon: 23.201345},
-			{lat: 42.826708, lon: 23.201345}
-			],
-
-
-		});
-		map.addLayer(layer);
-
-
+		const layerId = 'airquality-heat';
+	
+		// Check if the layer already exists
+		if (map.getLayer(layerId)) {
+			// If the layer exists, get its current visibility
+			const currentVisibility = map.getLayoutProperty(layerId, 'visibility');
+	
+			// Toggle the visibility
+			const newVisibility = currentVisibility === 'visible' ? 'none' : 'visible';
+			map.setLayoutProperty(layerId, 'visibility', newVisibility);
+		} else {
+			// If the layer doesn't exist, add it
+			const response = await fetch(heatmapData);
+			const geoJsonData = await response.json();
+	
+			// Extract points from GeoJSON features
+			const points = geoJsonData.features.map(feature => ({
+				lng: feature.geometry.coordinates[0],
+				lat: feature.geometry.coordinates[1],
+				val: feature.properties.value,
+			}));
+	
+			const layer = interpolateHeatmapLayer.create({
+				points: points,
+				layerId: layerId,
+				roi: [
+					{ lat: 42.826708, lon: 23.201345 },
+					{ lat: 42.826708, lon: 23.509432 },
+					{ lat: 42.57681, lon: 23.509432 },
+					{ lat: 42.57681, lon: 23.201345 },
+					{ lat: 42.826708, lon: 23.201345 }
+				],
+			});
+			map.addLayer(layer);
+		}
 	});
-
 	
 
 
