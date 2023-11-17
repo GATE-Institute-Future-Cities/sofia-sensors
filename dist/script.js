@@ -33,6 +33,7 @@ const sourceArray = {
   "citylab":  ['ppl_lsum', 'ppl_rsum'],
 };
 
+
 const fieldSelectArray = {
   "airthings": `<option value="TEMP">Temperature</option>
                     <option value="NO2">NO2</option>
@@ -88,14 +89,14 @@ const showUrbanLayer = (layer) => {
 };
 
 // Event listener for the heatmap toggle button
-heatmapBtn.addEventListener('click', () => {
-	heatmapVisible = !heatmapVisible; // Toggle the visibility state
+// heatmapBtn.addEventListener('click', () => {
+// 	heatmapVisible = !heatmapVisible; // Toggle the visibility state
 
-	const layerId = 'heatmap-layer';
-	const visibility = heatmapVisible ? 'visible' : 'none';
+// 	const layerId = 'heatmap-layer';
+// 	const visibility = heatmapVisible ? 'visible' : 'none';
 
-	map.setLayoutProperty(layerId, 'visibility', visibility);
-});
+// 	map.setLayoutProperty(layerId, 'visibility', visibility);
+// });
 
 const addSource = (mapInstanse, name, jsonData) => {
 	return mapInstanse.addSource(name, {
@@ -407,7 +408,8 @@ baseMapLayers.forEach(el => el.onclick = showSatelliteLayer);
 
 additionalMapLayers.forEach(el => el.onclick = showUrbanLayer);
 
-
+console.log(additionalMapLayers)
+console.log(heatmapBtn)
 const plotAirthings = async() => {
 	const data = await getHistoryData('airthings');
 	return Object.keys(data)
@@ -687,6 +689,16 @@ map.on("load", async function () {
 	  }
 	});
 
+
+
+
+
+	addLabelLayer(map, "bus-stop", "busStopSource", "name", '#8a8888',  visibility='none');
+	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
+	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
+	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
+
+	
 	const dataPoints = await fetchInterpolatedPoints();
 
 	const layer = interpolateHeatmapLayer.create({
@@ -702,14 +714,6 @@ map.on("load", async function () {
 	});
 
 	map.addLayer(layer);
-
-
-
-
-	addLabelLayer(map, "bus-stop", "busStopSource", "name", '#8a8888',  visibility='none');
-	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
-	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
-	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
 
 
 	sourceBtnArr.forEach((btn) => {
