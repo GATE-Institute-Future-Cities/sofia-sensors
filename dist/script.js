@@ -88,15 +88,6 @@ const showUrbanLayer = (layer) => {
 	}
 };
 
-// Event listener for the heatmap toggle button
-// heatmapBtn.addEventListener('click', () => {
-// 	heatmapVisible = !heatmapVisible; // Toggle the visibility state
-
-// 	const layerId = 'heatmap-layer';
-// 	const visibility = heatmapVisible ? 'visible' : 'none';
-
-// 	map.setLayoutProperty(layerId, 'visibility', visibility);
-// });
 
 const addSource = (mapInstanse, name, jsonData) => {
 	return mapInstanse.addSource(name, {
@@ -454,20 +445,6 @@ plotOption(activeSource, 'TEMP', selectedTime, selectedSensor)
 });
 
 
-// Fetch interpolated points 
-async function fetchInterpolatedPoints() {
-    const response = await fetch(heatmapData);
-    const geoJsonData = await response.json();
-
-    // Extract points from GeoJSON features
-    heatmapPoints = geoJsonData.features.map(feature => ({
-        lng: feature.geometry.coordinates[0],
-        lat: feature.geometry.coordinates[1],
-        val: feature.properties.value,
-    }));
-
-    return heatmapPoints;
-}
 
 
 map.on("load", async function () {
@@ -698,22 +675,36 @@ map.on("load", async function () {
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
 
-	
-	const dataPoints = await fetchInterpolatedPoints();
+	heatmapBtn.addEventListener('click', async () => {
+		const response = await fetch(heatmapData);
+		const geoJsonData = await response.json();
 
-	const layer = interpolateHeatmapLayer.create({
-		points: dataPoints,
-		layerId: 'heatmap-layer',
-		roi: [
+		// Extract points from GeoJSON features
+		const points = geoJsonData.features.map(feature => ({
+			lng: feature.geometry.coordinates[0],
+			lat: feature.geometry.coordinates[1],
+			val: feature.properties.value,
+		}));
+
+		const layer = interpolateHeatmapLayer.create({
+			points: points,
+			layerId: 'airquality-heat',
+			roi: [
 			{lat: 42.826708, lon: 23.201345},
 			{lat: 42.826708, lon: 23.509432},
 			{lat: 42.57681, lon: 23.509432},
 			{lat: 42.57681, lon: 23.201345},
 			{lat: 42.826708, lon: 23.201345}
-		],
+			],
+
+
+		});
+		map.addLayer(layer);
+
+
 	});
 
-	map.addLayer(layer);
+	
 
 
 	sourceBtnArr.forEach((btn) => {
