@@ -708,7 +708,7 @@ map.on("load", async function () {
 					{ lat: 42.826708, lon: 23.201345 }
 				],
 				framebufferFactor: 0.08,
-				opacity:0.4,
+				opacity:0.3,
 				p: 7,
 			});
 			map.addLayer(layer);
