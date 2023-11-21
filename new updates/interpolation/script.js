@@ -695,6 +695,9 @@ map.on("load", async function () {
 			// Toggle the visibility
 			const newVisibility = currentVisibility === 'visible' ? 'none' : 'visible';
 			map.setLayoutProperty(layerId, 'visibility', newVisibility);
+
+			// Update the button text based on the new visibility
+			showHeatLayer.innerText = newVisibility === 'visible' ? 'Hide Layer' : 'Show Layer';
 		} else {
 			// If the layer doesn't exist, add it
 			const response = await fetch(heatmapData);
