@@ -13,6 +13,7 @@ const tempSensor = document.querySelector("#tempValue");
 const listContainer = document.querySelector('.sensordata__list');
 const legendBuilding = document.querySelector('.building-legend');
 const heatmapBtn = document.getElementById('heatMapbutton');
+const toggleFormBtn = document.getElementById('dataForm')
 
 const dataSource2 = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devicesLastHour.geojson';
 const historyDataSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devices_1mnth.geojson';
@@ -61,10 +62,11 @@ const showSatelliteLayer = (layer) => {
 	map.setLayoutProperty("satellite", 'visibility', visibleOption);
 }
 
+
   // Toggle visibility of the data form
-heatmapBtn.click(function () {
-	document.getElementById('#dataForm').toggle();
-});
+heatmapBtn.addEventListener('click', () => {
+	toggleFormBtn.style.display = (toggleFormBtn.style.display === 'none' || toggleFormBtn.style.display === '') ? 'block' : 'none';
+  });
 
 const showUrbanLayer = (layer) => {
 	const clickedLayer = layer.target.value;
@@ -677,79 +679,79 @@ map.on("load", async function () {
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
 
-	heatmapBtn.addEventListener('click', async () => {
-		const layerId = 'airquality-heat';
+	// heatmapBtn.addEventListener('click', async () => {
+	// 	const layerId = 'airquality-heat';
 	
-		// Check if the layer already exists
-		if (map.getLayer(layerId)) {
-			// If the layer exists, get its current visibility
-			const currentVisibility = map.getLayoutProperty(layerId, 'visibility');
+	// 	// Check if the layer already exists
+	// 	if (map.getLayer(layerId)) {
+	// 		// If the layer exists, get its current visibility
+	// 		const currentVisibility = map.getLayoutProperty(layerId, 'visibility');
 	
-			// Toggle the visibility
-			const newVisibility = currentVisibility === 'visible' ? 'none' : 'visible';
-			map.setLayoutProperty(layerId, 'visibility', newVisibility);
-		} else {
-			// If the layer doesn't exist, add it
-			const response = await fetch(heatmapData);
-			const geoJsonData = await response.json();
+	// 		// Toggle the visibility
+	// 		const newVisibility = currentVisibility === 'visible' ? 'none' : 'visible';
+	// 		map.setLayoutProperty(layerId, 'visibility', newVisibility);
+	// 	} else {
+	// 		// If the layer doesn't exist, add it
+	// 		const response = await fetch(heatmapData);
+	// 		const geoJsonData = await response.json();
 	
-			// Extract points from GeoJSON features
-			const points = geoJsonData.features.map(feature => ({
-				lng: feature.geometry.coordinates[0],
-				lat: feature.geometry.coordinates[1],
-				val: feature.properties.value,
-			}));
+	// 		// Extract points from GeoJSON features
+	// 		const points = geoJsonData.features.map(feature => ({
+	// 			lng: feature.geometry.coordinates[0],
+	// 			lat: feature.geometry.coordinates[1],
+	// 			val: feature.properties.value,
+	// 		}));
 	
-			const layer = interpolateHeatmapLayer.create({
-				points: points,
-				layerId: layerId,
-				roi: [  // conrdinates for the targeted area in Sofia
+	// 		const layer = interpolateHeatmapLayer.create({
+	// 			points: points,
+	// 			layerId: layerId,
+	// 			roi: [  // conrdinates for the targeted area in Sofia
 				
-					{ lat: 42.62475099, lon: 23.35468471 },
-					{ lat: 42.62380373, lon: 23.36358194 },
-					{ lat: 42.62121763, lon: 23.43745619 },
-					{ lat: 42.62341172, lon: 23.44284 },
-					{ lat: 42.62917619, lon: 23.4470754 },
-					{ lat: 42.6632617, lon: 23.45753998 },
-					{ lat: 42.70762427, lon: 23.44972493 },
-					{ lat: 42.70852087, lon: 23.4401832 },
-					{ lat: 42.71776845, lon: 23.42535838 },
-					{ lat: 42.71957938, lon: 23.41971847 },
-					{ lat: 42.71991419, lon: 23.41398558 },
-					{ lat: 42.71916886, lon: 23.40584728 },
-					{ lat: 42.72118169, lon: 23.39145357 },
-					{ lat: 42.72288818, lon: 23.38667219 },
-					{ lat: 42.72639099, lon: 23.38171697 },
-					{ lat: 42.74733166, lon: 23.36034117 },
-					{ lat: 42.74984914, lon: 23.3557087 },
-					{ lat: 42.75139265, lon: 23.35176385 },
-					{ lat: 42.76053081, lon: 23.31108845 },
-					{ lat: 42.76908526, lon: 23.28666668 },
-					{ lat: 42.76192585, lon: 23.27068285 },
-					{ lat: 42.75961633, lon: 23.26693414 },
-					{ lat: 42.71405281, lon: 23.23144729 },
-					{ lat: 42.71294815, lon: 23.23040863 },
-					{ lat: 42.7110515, lon: 23.23046634 },
-					{ lat: 42.68966592, lon: 23.23039598 },
-					{ lat: 42.68768262, lon: 23.2321381 },
-					{ lat: 42.68492373, lon: 23.23702728 },
-					{ lat: 42.67871959, lon: 23.24847353 },
-					{ lat: 42.67709648, lon: 23.24952721 },
-					{ lat: 42.67485927, lon: 23.24988299 },
-					{ lat: 42.67285102, lon: 23.25041485 },
-					{ lat: 42.66363006, lon: 23.26157155 },
-					{ lat: 42.66124835, lon: 23.263082 },
-					{ lat: 42.66012181, lon: 23.26449571 },
-					{ lat: 42.65894472, lon: 23.26817213 },
-					{ lat: 42.62475099, lon: 23.35468471 }
-				],
-				framebufferFactor: 0.08,
-				opacity:0.3,
-				p: 7,
-			});
-			map.addLayer(layer);
-		}
-	});
+	// 				{ lat: 42.62475099, lon: 23.35468471 },
+	// 				{ lat: 42.62380373, lon: 23.36358194 },
+	// 				{ lat: 42.62121763, lon: 23.43745619 },
+	// 				{ lat: 42.62341172, lon: 23.44284 },
+	// 				{ lat: 42.62917619, lon: 23.4470754 },
+	// 				{ lat: 42.6632617, lon: 23.45753998 },
+	// 				{ lat: 42.70762427, lon: 23.44972493 },
+	// 				{ lat: 42.70852087, lon: 23.4401832 },
+	// 				{ lat: 42.71776845, lon: 23.42535838 },
+	// 				{ lat: 42.71957938, lon: 23.41971847 },
+	// 				{ lat: 42.71991419, lon: 23.41398558 },
+	// 				{ lat: 42.71916886, lon: 23.40584728 },
+	// 				{ lat: 42.72118169, lon: 23.39145357 },
+	// 				{ lat: 42.72288818, lon: 23.38667219 },
+	// 				{ lat: 42.72639099, lon: 23.38171697 },
+	// 				{ lat: 42.74733166, lon: 23.36034117 },
+	// 				{ lat: 42.74984914, lon: 23.3557087 },
+	// 				{ lat: 42.75139265, lon: 23.35176385 },
+	// 				{ lat: 42.76053081, lon: 23.31108845 },
+	// 				{ lat: 42.76908526, lon: 23.28666668 },
+	// 				{ lat: 42.76192585, lon: 23.27068285 },
+	// 				{ lat: 42.75961633, lon: 23.26693414 },
+	// 				{ lat: 42.71405281, lon: 23.23144729 },
+	// 				{ lat: 42.71294815, lon: 23.23040863 },
+	// 				{ lat: 42.7110515, lon: 23.23046634 },
+	// 				{ lat: 42.68966592, lon: 23.23039598 },
+	// 				{ lat: 42.68768262, lon: 23.2321381 },
+	// 				{ lat: 42.68492373, lon: 23.23702728 },
+	// 				{ lat: 42.67871959, lon: 23.24847353 },
+	// 				{ lat: 42.67709648, lon: 23.24952721 },
+	// 				{ lat: 42.67485927, lon: 23.24988299 },
+	// 				{ lat: 42.67285102, lon: 23.25041485 },
+	// 				{ lat: 42.66363006, lon: 23.26157155 },
+	// 				{ lat: 42.66124835, lon: 23.263082 },
+	// 				{ lat: 42.66012181, lon: 23.26449571 },
+	// 				{ lat: 42.65894472, lon: 23.26817213 },
+	// 				{ lat: 42.62475099, lon: 23.35468471 }
+	// 			],
+	// 			framebufferFactor: 0.08,
+	// 			opacity:0.3,
+	// 			p: 7,
+	// 		});
+	// 		map.addLayer(layer);
+	// 	}
+	// });
 	
 
 

@@ -71,9 +71,24 @@ input[type="text"]:focus {
 
 #dataForm{
   display: none;
+  position: absolute;
+  top: 20px;
+  right:20px;
+  z-index: 1;
 }
 
-.form-control{
-  width: 10%;
+
+.form-group{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px;
 }
- 
+
+#showHeatmap{
+  background: greenyellow;
+  border-radius: 3px;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  font-family: 'Open Sans', sans-serif;
+  width: 90%;
+}
