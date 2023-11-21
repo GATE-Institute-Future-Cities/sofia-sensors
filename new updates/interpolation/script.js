@@ -61,6 +61,10 @@ const showSatelliteLayer = (layer) => {
 	map.setLayoutProperty("satellite", 'visibility', visibleOption);
 }
 
+  // Toggle visibility of the data form
+heatmapBtn.click(function () {
+	document.getElementById('#dataForm').toggle();
+});
 
 const showUrbanLayer = (layer) => {
 	const clickedLayer = layer.target.value;
@@ -445,7 +449,6 @@ plotOption(activeSource, 'TEMP', selectedTime, selectedSensor)
 
 
 
-
 map.on("load", async function () {
 	addSource(map, 'sensorsCoords', dataSource2);
 	addSource(map, 'sensorsHistory', historyDataSource);
@@ -700,7 +703,8 @@ map.on("load", async function () {
 			const layer = interpolateHeatmapLayer.create({
 				points: points,
 				layerId: layerId,
-				roi: [  // conrdinates for the targeted area
+				roi: [  // conrdinates for the targeted area in Sofia
+				
 					{ lat: 42.62475099, lon: 23.35468471 },
 					{ lat: 42.62380373, lon: 23.36358194 },
 					{ lat: 42.62121763, lon: 23.43745619 },
