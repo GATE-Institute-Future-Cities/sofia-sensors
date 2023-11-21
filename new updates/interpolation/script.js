@@ -12,7 +12,7 @@ const humidSensor = document.querySelector("#humidValue");
 const tempSensor = document.querySelector("#tempValue");
 const listContainer = document.querySelector('.sensordata__list');
 const legendBuilding = document.querySelector('.building-legend');
-const heatmapBtn = document.getElementById('heatMapbutton');
+const heatmaptoggleBtn = document.getElementById('heatMapbutton');
 const toggleFormBtn = document.getElementById('dataForm')
 
 const dataSource2 = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devicesLastHour.geojson';
@@ -64,8 +64,10 @@ const showSatelliteLayer = (layer) => {
 
 
   // Toggle visibility of the data form
-heatmapBtn.addEventListener('click', () => {
+heatmaptoggleBtn.addEventListener('click', () => {
 	toggleFormBtn.style.display = (toggleFormBtn.style.display === 'none' || toggleFormBtn.style.display === '') ? 'block' : 'none';
+	heatmaptoggleBtn.innerText = heatmaptoggleBtn.innerText == 'Heat Map' ? 'Cancel': 'Heat Map';
+	
   });
 
 const showUrbanLayer = (layer) => {
@@ -404,8 +406,7 @@ baseMapLayers.forEach(el => el.onclick = showSatelliteLayer);
 
 additionalMapLayers.forEach(el => el.onclick = showUrbanLayer);
 
-console.log(additionalMapLayers)
-console.log(heatmapBtn)
+
 const plotAirthings = async() => {
 	const data = await getHistoryData('airthings');
 	return Object.keys(data)
