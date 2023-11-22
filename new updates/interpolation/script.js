@@ -13,8 +13,10 @@ const tempSensor = document.querySelector("#tempValue");
 const listContainer = document.querySelector('.sensordata__list');
 const legendBuilding = document.querySelector('.building-legend');
 const heatmaptoggleBtn = document.getElementById('heatMapbutton');
-const toggleFormBtn = document.getElementById('dataForm')
-const showHeatLayer = document.getElementById('showHeatmap')
+const toggleFormBtn = document.getElementById('dataForm');
+const showHeatLayer = document.getElementById('showHeatmap');
+let timeInput = document.getElementById('timeframe');
+let pollutantInput = document.getElementById('airQuality');
 
 const dataSource2 = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devicesLastHour.geojson';
 const historyDataSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devices_1mnth.geojson';
@@ -686,7 +688,13 @@ map.on("load", async function () {
 	});
 
 	showHeatLayer.addEventListener('click', async () => {
-		const layerId = 'airquality-heat';
+
+		showHeatLayer.innerText = 'Hide Layer'
+		const selectedTime = timeInput.value;
+		const selectedPollutant = pollutantInput.value;
+
+
+		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 	
 		// Check if the layer already exists
 		if (map.getLayer(layerId)) {
@@ -700,6 +708,9 @@ map.on("load", async function () {
 			// Update the button text based on the new visibility
 			showHeatLayer.innerText = newVisibility === 'visible' ? 'Hide Layer' : 'Show Layer';
 		} else {
+
+			const geoJsonUrl = `C:\\Users\\35987\\Desktop\\sofia-sensors\\pollutants data\\o3geojson\\prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
+
 			// If the layer doesn't exist, add it
 			const response = await fetch(heatmapData);
 			const geoJsonData = await response.json();
@@ -755,11 +766,11 @@ map.on("load", async function () {
 					{ lat: 42.62475099, lon: 23.35468471 }
 				],
 				framebufferFactor: 0.08,
-				opacity:0.3,
+				opacity:0.4,
 				p: 7,
 			});
 			map.addLayer(layer);
-			showHeatLayer.innerText = 'Hide Layer'
+
 		}
 	});
 	
