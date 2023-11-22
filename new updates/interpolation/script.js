@@ -67,13 +67,6 @@ const showSatelliteLayer = (layer) => {
 }
 
 
-  // Toggle visibility of the data form
-heatmaptoggleBtn.addEventListener('click', () => {
-	toggleFormBtn.style.display = (toggleFormBtn.style.display === 'none' || toggleFormBtn.style.display === '') ? 'block' : 'none';
-	heatmaptoggleBtn.innerText = heatmaptoggleBtn.innerText == 'Heat Map' ? 'Cancel': 'Heat Map';
-	
-  });
-
 const showUrbanLayer = (layer) => {
 	const clickedLayer = layer.target.value;
 
@@ -684,6 +677,14 @@ map.on("load", async function () {
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
 
+	
+	  // Toggle visibility of the heatmap form
+	heatmaptoggleBtn.addEventListener('click', () => {
+		toggleFormBtn.style.display = (toggleFormBtn.style.display === 'none' || toggleFormBtn.style.display === '') ? 'block' : 'none';
+		heatmaptoggleBtn.innerText = heatmaptoggleBtn.innerText == 'Heat Map' ? 'Cancel': 'Heat Map';
+		
+	});
+
 	showHeatLayer.addEventListener('click', async () => {
 		const layerId = 'airquality-heat';
 	
@@ -692,7 +693,7 @@ map.on("load", async function () {
 			// If the layer exists, get its current visibility
 			const currentVisibility = map.getLayoutProperty(layerId, 'visibility');
 	
-			// Toggle the visibility
+			
 			const newVisibility = currentVisibility === 'visible' ? 'none' : 'visible';
 			map.setLayoutProperty(layerId, 'visibility', newVisibility);
 
@@ -758,6 +759,7 @@ map.on("load", async function () {
 				p: 7,
 			});
 			map.addLayer(layer);
+			showHeatLayer.innerText = 'Hide Layer'
 		}
 	});
 	
