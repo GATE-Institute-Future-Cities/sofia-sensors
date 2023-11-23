@@ -693,6 +693,12 @@ map.on("load", async function () {
 		const selectedTime = timeInput.value;
 		const selectedPollutant = pollutantInput.value;
 
+		const geoJsonUrl = `C:\\Users\\35987\\Desktop\\sofia-sensors\\pollutantsData\\o3geojson\\prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
+
+		console.log(geoJsonUrl)
+
+		console.log(selectedPollutant)
+		console.log(selectedTime)
 
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 	
@@ -709,10 +715,8 @@ map.on("load", async function () {
 			showHeatLayer.innerText = newVisibility === 'visible' ? 'Hide Layer' : 'Show Layer';
 		} else {
 
-			const geoJsonUrl = `C:\\Users\\35987\\Desktop\\sofia-sensors\\pollutants data\\o3geojson\\prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
-
 			// If the layer doesn't exist, add it
-			const response = await fetch(heatmapData);
+			const response = await fetch(geoJsonUrl);
 			const geoJsonData = await response.json();
 	
 			// Extract points from GeoJSON features
