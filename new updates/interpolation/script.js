@@ -691,7 +691,6 @@ map.on("load", async function () {
 		const selectedTime = timeInput.value;
 		const selectedPollutant = pollutantInput.value;
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
-
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 
 		console.log(geoJsonUrl)
