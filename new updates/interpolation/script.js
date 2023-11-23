@@ -25,8 +25,6 @@ const citylabDevice = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/
 const subwaySource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/railway_subway_entrance.geojson';
 const busStopSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/stops_2020_4326.geojson';
 const heatmapData = "https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/heatmap_geojson_file.geojson"; //ExEa heatmap demo data 
-const NO2Data = "https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/NO2_data.geojson"; //ExEa heatmap demo data 
-
 
 let activeLayer = 'TEMP-layer';
 let activeSource = 'airthings';
@@ -682,25 +680,26 @@ map.on("load", async function () {
 	
 	  // Toggle visibility of the heatmap form
 	heatmaptoggleBtn.addEventListener('click', () => {
-		toggleFormBtn.style.display = (toggleFormBtn.style.display === 'none' || toggleFormBtn.style.display === '') ? 'block' : 'none';
-		heatmaptoggleBtn.innerText = heatmaptoggleBtn.innerText == 'Heat Map' ? 'Cancel': 'Heat Map';
+		const isFormVisible = toggleFormBtn.style.display === 'block';
+		toggleFormBtn.style.display = isFormVisible ? 'none' : 'block';
+		heatmaptoggleBtn.innerText = isFormVisible ? 'Heat Map' : 'Cancel';
 		
 	});
 
 	showHeatLayer.addEventListener('click', async () => {
 
-		showHeatLayer.innerText = 'Hide Layer'
 		const selectedTime = timeInput.value;
 		const selectedPollutant = pollutantInput.value;
+		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 
-		const geoJsonUrl = `C:\\Users\\35987\\Desktop\\sofia-sensors\\pollutantsData\\o3geojson\\prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
+		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/o3geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 
 		console.log(geoJsonUrl)
 
 		console.log(selectedPollutant)
 		console.log(selectedTime)
 
-		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
+		
 	
 		// Check if the layer already exists
 		if (map.getLayer(layerId)) {
@@ -770,7 +769,7 @@ map.on("load", async function () {
 					{ lat: 42.62475099, lon: 23.35468471 }
 				],
 				framebufferFactor: 0.08,
-				opacity:0.4,
+				opacity:0.3,
 				p: 7,
 			});
 			map.addLayer(layer);
