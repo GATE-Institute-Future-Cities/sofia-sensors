@@ -24,7 +24,6 @@ const walkingDataSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/m
 const citylabDevice = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/citylab_sensors.geojson';
 const subwaySource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/railway_subway_entrance.geojson';
 const busStopSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/stops_2020_4326.geojson';
-const heatmapData = "https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/EXEA%20DATA/heatmap_geojson_file.geojson"; //ExEa heatmap demo data 
 
 let activeLayer = 'TEMP-layer';
 let activeSource = 'airthings';
@@ -693,14 +692,9 @@ map.on("load", async function () {
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 
-		console.log(geoJsonUrl)
-
-		console.log(selectedPollutant)
-		console.log(selectedTime)
-
 		
 	
-		// Check if the layer already exists
+		
 		if (map.getLayer(layerId)) {
 			// If the layer exists, get its current visibility
 			const currentVisibility = map.getLayoutProperty(layerId, 'visibility');
