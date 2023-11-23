@@ -692,7 +692,7 @@ map.on("load", async function () {
 		const selectedPollutant = pollutantInput.value;
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 
-		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/o3geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
+		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 
 		console.log(geoJsonUrl)
 
@@ -705,7 +705,6 @@ map.on("load", async function () {
 		if (map.getLayer(layerId)) {
 			// If the layer exists, get its current visibility
 			const currentVisibility = map.getLayoutProperty(layerId, 'visibility');
-	
 			
 			const newVisibility = currentVisibility === 'visible' ? 'none' : 'visible';
 			map.setLayoutProperty(layerId, 'visibility', newVisibility);
@@ -773,6 +772,7 @@ map.on("load", async function () {
 				p: 7,
 			});
 			map.addLayer(layer);
+			showHeatLayer.innerText = 'Hide Layer'
 
 		}
 	});
