@@ -86,7 +86,7 @@ input[type="text"]:focus {
 
 #showHeatmap,
 #hideHeatmap {
-  position: relative; /* Change from absolute to relative */
+  position: absolute; /* Change from absolute to relative */
   background: #fff;
   border-radius: 3px;
   border: 2px solid rgba(0, 0, 0, 0.4);
@@ -98,7 +98,8 @@ input[type="text"]:focus {
 
 
 #showHeatmap:hover,
-#hideHeatmap:hover {
+#hideHeatmap:hover,
+#heatMapbutton:hover {
   background: rgb(14, 73, 137);
   color: #fff;
 }

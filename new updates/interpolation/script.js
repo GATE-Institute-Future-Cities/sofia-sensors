@@ -15,6 +15,7 @@ const legendBuilding = document.querySelector('.building-legend');
 const heatmaptoggleBtn = document.getElementById('heatMapbutton');
 const toggleFormBtn = document.getElementById('dataForm');
 const showHeatLayer = document.getElementById('showHeatmap');
+const hideHeatLayer = document.getElementById('hideHeatmap');
 let timeInput = document.getElementById('timeframe');
 let pollutantInput = document.getElementById('airQuality');
 
@@ -691,19 +692,22 @@ map.on("load", async function () {
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 
-		
+		const visibleLayerExists = map.getStyle().layers.some(layer => {
+			const layerId = layer.id;
+			// Check if the layer is a style layer and starts with the specified prefix
+			console.log(layerId)
+			return (
+				layerId.startsWith('airquality-heat-') 
+			);
+		});
 	
-		
-		if (map.getLayer(layerId)) {
-			// If the layer exists, get its current visibility
-			const currentVisibility = map.getLayoutProperty(layerId, 'visibility');
-			
-			const newVisibility = currentVisibility === 'visible' ? 'none' : 'visible';
-			map.setLayoutProperty(layerId, 'visibility', newVisibility);
+		if (visibleLayerExists) {
+			// Display an alert and return to prevent showing a new layer
+			alert('Please hide the current layer before showing another one.');
+			return;
+		}
 
-			// Update the button text based on the new visibility
-			showHeatLayer.innerText = newVisibility === 'visible' ? 'Hide Layer' : 'Show Layer';
-		} else {
+		if (!map.getLayer(layerId)) {
 
 			// If the layer doesn't exist, add it
 			const response = await fetch(geoJsonUrl);
@@ -764,11 +768,27 @@ map.on("load", async function () {
 				p: 7,
 			});
 			map.addLayer(layer);
-			showHeatLayer.innerText = 'Hide Layer'
 
 		}
+
+		
+		map.setLayoutProperty(layerId, 'visibility', 'visible');
+	    hideHeatLayer.style.display = 'block';
+    	showHeatLayer.style.display = 'none';
 	});
-	
+
+		// Hide Layer Button
+	hideHeatLayer.addEventListener('click', () => {
+		const selectedTime = timeInput.value;
+		const selectedPollutant = pollutantInput.value;
+		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
+
+		
+		map.setLayoutProperty(layerId, 'visibility', 'none');
+		hideHeatLayer.style.display = 'none';
+		showHeatLayer.style.display = 'block';
+	});
+		
 
 
 	sourceBtnArr.forEach((btn) => {
