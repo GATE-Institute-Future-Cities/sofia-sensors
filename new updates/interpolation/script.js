@@ -455,7 +455,6 @@ map.on("load", async function () {
 	addSource(map, 'sensorsPedHistory', walkingDataSource);
 	addSource(map, 'subwaySource', subwaySource);
   	addSource(map, 'busStopSource', busStopSource);
-	addSource(map, 'heatmapData', heatmapData);
   
 
 	map.addLayer({
@@ -718,7 +717,7 @@ map.on("load", async function () {
 			}));
 	
 			const layer = interpolateHeatmapLayer.create({
-				points: points,
+				points: points, // the points are cordinates and the values we got from the geojson file
 				layerId: layerId,
 				roi: [  // conrdinates for the targeted area in Sofia
 				
@@ -760,8 +759,8 @@ map.on("load", async function () {
 					{ lat: 42.65894472, lon: 23.26817213 },
 					{ lat: 42.62475099, lon: 23.35468471 }
 				],
-				framebufferFactor: 0.08,
-				opacity:0.3,
+				framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
+				opacity:0.3, 
 				p: 7,
 			});
 			map.addLayer(layer);

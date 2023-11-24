@@ -61,24 +61,7 @@ input[type="text"]:focus {
     border: 2px solid rgba(0, 0, 0, 0.4);
     font-family: 'Open Sans', sans-serif;
   }
-   
-
-#showHeatmap{
-    position: absolute;
-    right: 9px;
-    background: #fff;
-    border-radius: 3px;
-    border: 2px solid rgba(0, 0, 0, 0.4);
-    font-family: 'Open Sans', sans-serif;
-    width: 85%;
-    margin-top: 10px;
-  }
-
-#heatMapbutton:hover,
-#showHeatmap:hover {
-  background: rgb(14, 73, 137);
-  color: #fff;
-}
+  
 
 
 #dataForm{
@@ -93,9 +76,29 @@ input[type="text"]:focus {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 15px;
+  padding: 10px;
 }
 
 .form-group label {
   padding-bottom: 3px;
+}
+
+
+#showHeatmap,
+#hideHeatmap {
+  position: relative; /* Change from absolute to relative */
+  background: #fff;
+  border-radius: 3px;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  font-family: 'Open Sans', sans-serif;
+  width: 85%; /* Adjust width */
+  margin: 8px 0 8px 0;
+  
+}
+
+
+#showHeatmap:hover,
+#hideHeatmap:hover {
+  background: rgb(14, 73, 137);
+  color: #fff;
 }
