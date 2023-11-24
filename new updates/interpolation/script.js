@@ -18,6 +18,7 @@ const showHeatLayer = document.getElementById('showHeatmap');
 const hideHeatLayer = document.getElementById('hideHeatmap');
 let timeInput = document.getElementById('timeframe');
 let pollutantInput = document.getElementById('airQuality');
+let selectors = document.querySelectorAll('.form-control')
 
 const dataSource2 = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devicesLastHour.geojson';
 const historyDataSource = 'https://raw.githubusercontent.com/jtuvaleva/devices/main/data/devices_1mnth.geojson';
@@ -389,6 +390,15 @@ const plotOption = async (source, activeLayerName, selectedTime, selectedSensor)
 	return [allOption, selectedOption]
 }
 
+const checkAndalert = () => {
+	if (hideHeatLayer.style.display === 'block') {
+
+        alert('Please hide the current layer before changing the time/pollutant.');
+        
+    }
+};
+
+
 
 const map = new mapboxgl.Map({
 	container: 'map',
@@ -684,7 +694,7 @@ map.on("load", async function () {
 		heatmaptoggleBtn.innerText = isFormVisible ? 'Heat Map' : 'Cancel';
 		
 	});
-
+    // show the layer button
 	showHeatLayer.addEventListener('click', async () => {
 
 		const selectedTime = timeInput.value;
@@ -692,20 +702,6 @@ map.on("load", async function () {
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 
-		const visibleLayerExists = map.getStyle().layers.some(layer => {
-			const layerId = layer.id;
-			// Check if the layer is a style layer and starts with the specified prefix
-			console.log(layerId)
-			return (
-				layerId.startsWith('airquality-heat-') 
-			);
-		});
-	
-		if (visibleLayerExists) {
-			// Display an alert and return to prevent showing a new layer
-			alert('Please hide the current layer before showing another one.');
-			return;
-		}
 
 		if (!map.getLayer(layerId)) {
 
@@ -764,8 +760,8 @@ map.on("load", async function () {
 					{ lat: 42.62475099, lon: 23.35468471 }
 				],
 				framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
-				opacity:0.3, 
-				p: 7,
+				opacity:0.3, // the intensity of the colors
+
 			});
 			map.addLayer(layer);
 
@@ -773,8 +769,8 @@ map.on("load", async function () {
 
 		
 		map.setLayoutProperty(layerId, 'visibility', 'visible');
-	    hideHeatLayer.style.display = 'block';
-    	showHeatLayer.style.display = 'none';
+	    hideHeatLayer.style.display = 'block';//show the hide layer 
+    	showHeatLayer.style.display = 'none'; // hide the show layer button
 	});
 
 		// Hide Layer Button
@@ -784,10 +780,18 @@ map.on("load", async function () {
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 
 		
-		map.setLayoutProperty(layerId, 'visibility', 'none');
-		hideHeatLayer.style.display = 'none';
-		showHeatLayer.style.display = 'block';
+		map.setLayoutProperty(layerId, 'visibility', 'none');//hide layer
+		hideHeatLayer.style.display = 'none'; //hide the hide layer btn
+		showHeatLayer.style.display = 'block'; // show the show layer btn
 	});
+
+	selectors.addEventListener('click', () =>{
+
+		//this is for showing an alert when trying visuiles another heatmap layer while there is a visible one
+		if(hideHeatLayer.style.display == 'block'){
+			alert('Please hide the current layer before changing the time/pollutant.');
+		}
+	})
 		
 
 
