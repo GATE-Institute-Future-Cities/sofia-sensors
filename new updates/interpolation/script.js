@@ -390,11 +390,9 @@ const plotOption = async (source, activeLayerName, selectedTime, selectedSensor)
 	return [allOption, selectedOption]
 }
 
-const checkAndalert = () => {
+const checkAndalert = () => { // alert meesage for change of layer when having a visible one
 	if (hideHeatLayer.style.display === 'block') {
-
-        alert('Please hide the current layer before changing the time/pollutant.');
-        
+        alert('Please hide the current layer before changing the time/pollutant.');   
     }
 };
 
@@ -785,14 +783,11 @@ map.on("load", async function () {
 		showHeatLayer.style.display = 'block'; // show the show layer btn
 	});
 
-	selectors.addEventListener('click', () =>{
-
-		//this is for showing an alert when trying visuiles another heatmap layer while there is a visible one
-		if(hideHeatLayer.style.display == 'block'){
-			alert('Please hide the current layer before changing the time/pollutant.');
-		}
-	})
-		
+	//this is for showing an alert when trying visuiles another heatmap layer while there is a visible one
+	selectors.forEach(selector => {
+		selector.addEventListener('click', checkAndalert);
+	});
+	
 
 
 	sourceBtnArr.forEach((btn) => {
