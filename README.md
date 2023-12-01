@@ -35,3 +35,7 @@ Updating the graph for the selected sensor:
 Updating the graph when selecting a different sensor.
 The project works with geographic data and provides opportunities for the visualization and analysis of sensor information in Sofia.
 
+You can access the map by visiting this URL:
+
+https://twin-web.gate-ai.eu/sofiasensors/
+
