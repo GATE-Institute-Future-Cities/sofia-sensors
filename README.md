@@ -1,6 +1,6 @@
 # sofia-sensors
 
-The project uses Mapbox GL JS and ECharts libraries for visualizing sensor data in Sofia. The code incorporates a Mapbox API key for initializing the map.
+The project uses Mapbox GL JS for visualizing sensor data in Sofia. The code incorporates a Mapbox API key for initializing the map.
 
 The project includes the following functionalities:
 
@@ -34,3 +34,4 @@ Updating the graph for the selected sensor:
 
 Updating the graph when selecting a different sensor.
 The project works with geographic data and provides opportunities for the visualization and analysis of sensor information in Sofia.
+
