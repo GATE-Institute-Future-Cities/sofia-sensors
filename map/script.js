@@ -758,7 +758,7 @@ map.on("load", async function () {
 					{ lat: 42.62475099, lon: 23.35468471 }
 				],
 				framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
-				opacity:0.3, // the intensity of the colors
+				opacity:0.4, // the intensity of the colors
 
 			});
 			map.addLayer(layer);
