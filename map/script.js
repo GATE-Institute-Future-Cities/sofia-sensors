@@ -700,9 +700,7 @@ map.on("load", async function () {
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 
-
 		if (!map.getLayer(layerId)) {
-
 			// If the layer doesn't exist, add it
 			const response = await fetch(geoJsonUrl);
 			const geoJsonData = await response.json();
