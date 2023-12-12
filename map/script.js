@@ -396,6 +396,16 @@ const checkAndalert = () => { // alert meesage for change of layer when having a
     }
 };
 
+const getpollutantValues = () => {  // Get random values for now when clikcing on a certain point on the map
+	return {
+		'O3':(Math.random() * 100).toFixed(6),
+		'NO2':(Math.random() * 100).toFixed(6),
+		'SO2':(Math.random() * 100).toFixed(6),
+		'PM10':(Math.random() * 100).toFixed(6),
+	}
+}
+
+
 
 
 const map = new mapboxgl.Map({
