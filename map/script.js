@@ -891,19 +891,17 @@ map.on("load", async function () {
 	})
 	}, false);
 
-	map.on('click', function(e){
+	map.on('click', function(e){ // this is the popup upon clicking on any point on the map
 
-		var cordinates = map.unproject(e.point);
-
-
+		var cordinates = map.unproject(e.point); //getst the cordnates depending on the users click on the map
 		var pollutantValues = getpollutantValues();
 
-		var popupBox = '<h3>Pollutants</h3>'
+		var popupBox = '<h3>Pollutants</h3>' // for the html content of the popup
 		for (var pollutant in pollutantValues){
 			popupBox  += '<p>' + pollutant + ': ' + pollutantValues[pollutant] + '</p>'
 		}
 
-		var popup = new mapboxgl.Popup()
+		new mapboxgl.Popup()
 		.setLngLat(cordinates)
 		.setHTML(popupBox)
 		.addTo(map)
