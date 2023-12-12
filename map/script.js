@@ -890,6 +890,23 @@ map.on("load", async function () {
 		}
 	})
 	}, false);
+
+	map.on('click', function(e){
+		var features = map.queryRenderedFeatures(e.point)
+
+		if(!features.length){
+			return;
+		}
+
+		var cordinates = features[0].geometry.coordinates;
+		var pollutantValues = getpollutantValues();
+
+		var popupBox = '<h3>Pollutants</h3>'
+		for (var pollutant in pollutantValues){
+			popupBox  += '<p>' + pollutant + ': ' + pollutantValues[pollutant] + '</p>'
+		}
+
+	})
 	
 	//добавление инфы про датчик при клике на него
 	map.on("click", (e) => {
