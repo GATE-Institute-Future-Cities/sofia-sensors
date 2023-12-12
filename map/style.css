@@ -103,3 +103,28 @@ input[type="text"]:focus {
   background: rgb(14, 73, 137);
   color: #fff;
 }
+
+.mapboxgl-popup {
+  max-width: 300px;
+  font-family: 'Arial', sans-serif;
+}
+
+.mapboxgl-popup-content {
+  padding: 10px;
+}
+
+.mapboxgl-popup h3 {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: red;
+}
+
+.mapboxgl-popup p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.mapboxgl-popup-close-button{
+  font-size: 30px;
+}

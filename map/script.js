@@ -896,9 +896,9 @@ map.on("load", async function () {
 		var cordinates = map.unproject(e.point); //getst the cordnates depending on the users click on the map
 		var pollutantValues = getpollutantValues();
 
-		var popupBox = '<h3>Pollutants</h3>' // for the html content of the popup
+		var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // for the html content of the popup
 		for (var pollutant in pollutantValues){
-			popupBox  += '<p>' + pollutant + ': ' + pollutantValues[pollutant] + '</p>'
+			popupBox  += '<p id="popupPollutants">' + pollutant + ': ' + pollutantValues[pollutant] + '</p>'
 		}
 
 		new mapboxgl.Popup()
