@@ -892,19 +892,21 @@ map.on("load", async function () {
 	}, false);
 
 	map.on('click', function(e){
-		var features = map.queryRenderedFeatures(e.point)
 
-		if(!features.length){
-			return;
-		}
+		var cordinates = map.unproject(e.point);
 
-		var cordinates = features[0].geometry.coordinates;
+
 		var pollutantValues = getpollutantValues();
 
 		var popupBox = '<h3>Pollutants</h3>'
 		for (var pollutant in pollutantValues){
 			popupBox  += '<p>' + pollutant + ': ' + pollutantValues[pollutant] + '</p>'
 		}
+
+		var popup = new mapboxgl.Popup()
+		.setLngLat(cordinates)
+		.setHTML(popupBox)
+		.addTo(map)
 
 	})
 	
