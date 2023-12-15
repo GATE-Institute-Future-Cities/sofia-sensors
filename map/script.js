@@ -399,16 +399,25 @@ const checkAndalert = () => { // alert meesage for change of layer when having a
 const getpollutantValues = () => {  // Get random values for now when clikcing on a certain point on the map
 	const generateRandomValue = () => (Math.random() * 200).toFixed(4) 
 
-	pollutants =  {
-		'O3': generateRandomValue(),
-		'NO2': generateRandomValue(),
-		'SO2': generateRandomValue(),
-		'PM10': generateRandomValue(),
-	}
+	const pollutants =  {}
 
-	for(const pollu in pollutants)(
-		
-	)
+	for (const pollutant of ['O3', 'NO2', 'SO2', 'PM10']) {
+		const value1 = generateRandomValue();
+		const value2 = generateRandomValue();
+
+		const smallerValue = Math.min(value1, value2);
+		const biggerValue = Math.max(value1, value2);
+		const averageValue = (( parseFloat(smallerValue) + parseFloat(biggerValue) ) / 2).toFixed(4)
+
+		pollutants[pollutant] = {
+			smaller: smallerValue,
+			larger: biggerValue,
+			average: averageValue,
+		};
+
+	}
+	
+	return pollutants
 }
 
 
