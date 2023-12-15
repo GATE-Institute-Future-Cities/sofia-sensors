@@ -411,7 +411,7 @@ const getpollutantValues = () => {  // Get random values for now when clikcing o
 
 		pollutants[pollutant] = {
 			smaller: smallerValue,
-			larger: biggerValue,
+			bigger: biggerValue,
 			average: averageValue,
 		};
 
@@ -913,7 +913,9 @@ map.on("load", async function () {
 
 		var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // for the html content of the popup
 		for (var pollutant in pollutantValues){
-			popupBox  += '<p id="popupPollutants">' + pollutant + ': ' + pollutantValues[pollutant] + '</p>'
+			popupBox  += '<p id="popupPollutants">' + pollutant + ': ' 
+			pollutantValues[pollutant].smaller + ' - ' +
+			pollutantValues[pollutant].bigger
 		}
 
 		new mapboxgl.Popup()
