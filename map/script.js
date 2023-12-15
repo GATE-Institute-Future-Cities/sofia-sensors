@@ -913,12 +913,14 @@ map.on("load", async function () {
 
 		var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // for the html content of the popup
 		for (var pollutant in pollutantValues){
-			popupBox  += '<p id="popupPollutants">' + pollutant + ': ' 
-			pollutantValues[pollutant].smaller + ' - ' +
-			pollutantValues[pollutant].bigger + '(Avg: ' +
-			pollutantValues[pollutant].average + ')</p>'
+			popupBox  += '<p>' + pollutant + ': '  + '</p>' + 
+
+			'<p>' + pollutantValues[pollutant].smaller + ' - ' +
+			pollutantValues[pollutant].bigger + ' (EST: ' +
+			pollutantValues[pollutant].average + ') </p>'
 		}
 
+		console.log(pollutantValues)
 		new mapboxgl.Popup()
 		.setLngLat(cordinates)
 		.setHTML(popupBox)

@@ -107,7 +107,7 @@ input[type="text"]:focus {
 .mapboxgl-popup {
   font-family: 'Open Sans', sans-serif;
   border-radius: 4px;
-  width: 150px;
+  width: 500px;
 }
 
 .mapboxgl-popup-content {
@@ -124,7 +124,7 @@ input[type="text"]:focus {
 
 .mapboxgl-popup p {
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
 }
 
