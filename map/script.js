@@ -913,7 +913,7 @@ map.on("load", async function () {
 
 		var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // for the html content of the popup
 		for (var pollutant in pollutantValues){
-			popupBox  += '<p>' + pollutant + ': '  + '</p>' + 
+			popupBox  += '<p id="pollutantName">' + pollutant + ' : '  + '</p>' + 
 
 			'<p>' + pollutantValues[pollutant].smaller + ' - ' +
 			pollutantValues[pollutant].bigger + ' (EST: ' +

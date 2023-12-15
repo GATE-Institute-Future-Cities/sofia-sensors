@@ -112,20 +112,21 @@ input[type="text"]:focus {
 
 .mapboxgl-popup-content {
   padding: 20px;
-  line-height: 1.6;
+  line-height: 1.8;
 }
 
 .mapboxgl-popup h3 {
   margin: 0;
   margin-bottom: 10px;
-  font-size: 15px;
+  font-size: 20px;
   color: red;
+  text-align: center;
 }
 
 .mapboxgl-popup p {
   margin: 0;
-  font-size: 12px;
-  color: #666;
+  font-size: 13px;
+  color: black;
 }
 
 .mapboxgl-popup-close-button {
@@ -136,4 +137,9 @@ input[type="text"]:focus {
 
 .mapboxgl-popup-close-button:hover {
   color: #555;
+}
+
+.mapboxgl-popup #pollutantName{
+  font-size: 15px;
+  color: red;
 }
