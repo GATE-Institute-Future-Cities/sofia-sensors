@@ -915,7 +915,8 @@ map.on("load", async function () {
 		for (var pollutant in pollutantValues){
 			popupBox  += '<p id="popupPollutants">' + pollutant + ': ' 
 			pollutantValues[pollutant].smaller + ' - ' +
-			pollutantValues[pollutant].bigger
+			pollutantValues[pollutant].bigger + '(Avg: ' +
+			pollutantValues[pollutant].average + ')</p>'
 		}
 
 		new mapboxgl.Popup()
