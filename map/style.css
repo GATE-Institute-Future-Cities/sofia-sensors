@@ -107,7 +107,6 @@ input[type="text"]:focus {
 .mapboxgl-popup {
   font-family: 'Open Sans', sans-serif;
   border-radius: 4px;
-  width: 500px;
 }
 
 .mapboxgl-popup-content {
@@ -131,12 +130,13 @@ input[type="text"]:focus {
 
 .mapboxgl-popup-close-button {
   font-size: 25px;
-  color: #999;
+  color: black;
+  padding-right: 5px;
 
 }
 
 .mapboxgl-popup-close-button:hover {
-  color: #555;
+  color: red;
 }
 
 .mapboxgl-popup #pollutantName{
