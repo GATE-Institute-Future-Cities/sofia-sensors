@@ -708,6 +708,26 @@ map.on("load", async function () {
 	  }
 	});
 
+	map.addLayer({
+        'id': 'sofia-area-layer',
+        'type': 'fill',
+        'source': {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': [sofiaCoordinates]
+                }
+            }
+        },
+        'layout': {},
+		'paint': {
+            'fill-color': 'rgba(0, 0, 0, 0)', // Fully transparent color
+            'fill-opacity': 0
+        }
+    });
+
 
 
 
