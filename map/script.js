@@ -935,25 +935,26 @@ map.on("load", async function () {
 	}, false);
 
 	map.on('click', function(e){ // this is the popup upon clicking on any point on the map
+		var sofialayerID = 'sofia-area-layer'
+		var features = map.queryRenderedFeatures(e.point, {layers: [sofialayerID]});
 
-		var cordinates = map.unproject(e.point); //getst the cordnates depending on the users click on the map
-		var pollutantValues = getpollutantValues();
+		if (features.length > 0) {
+            var cordinates = map.unproject(e.point);
+            var pollutantValues = getpollutantValues();
+			var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // for the html content of the popup
+			for (var pollutant in pollutantValues){
+				popupBox  += '<p id="pollutantName">' + pollutant + ' : '  + '</p>' + 
 
-		var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // for the html content of the popup
-		for (var pollutant in pollutantValues){
-			popupBox  += '<p id="pollutantName">' + pollutant + ' : '  + '</p>' + 
+				'<p>' + pollutantValues[pollutant].smaller + ' - ' +
+				pollutantValues[pollutant].bigger + ' (EST: ' +
+				pollutantValues[pollutant].average + ') </p>'
+			}
 
-			'<p>' + pollutantValues[pollutant].smaller + ' - ' +
-			pollutantValues[pollutant].bigger + ' (EST: ' +
-			pollutantValues[pollutant].average + ') </p>'
+			new mapboxgl.Popup()
+			.setLngLat(cordinates)
+			.setHTML(popupBox)
+			.addTo(map)
 		}
-
-		console.log(pollutantValues)
-		new mapboxgl.Popup()
-		.setLngLat(cordinates)
-		.setHTML(popupBox)
-		.addTo(map)
-
 	})
 	
 	//добавление инфы про датчик при клике на него
