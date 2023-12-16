@@ -38,6 +38,14 @@ const sourceArray = {
   "citylab":  ['ppl_lsum', 'ppl_rsum'],
 };
 
+var sofiaCoordinates = [
+	[23.181467, 42.563938],
+	[23.427078, 42.563938],
+	[23.427078, 42.768658],
+	[23.181467, 42.768658],
+	[23.181467, 42.563938]
+];
+
 
 const fieldSelectArray = {
   "airthings": `<option value="TEMP">Temperature</option>
