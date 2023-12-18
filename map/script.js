@@ -37,7 +37,7 @@ const sourceArray = {
   "airthings": ['TEMP', 'NO2', 'SO2', 'HUMIDITY'],
   "citylab":  ['ppl_lsum', 'ppl_rsum'],
 };
-
+var isHeatmapLayerVisibile = false
 var sofiaCoordinates = [
 	[23.181467, 42.563938],
 	[23.427078, 42.563938],
@@ -747,7 +747,7 @@ map.on("load", async function () {
 	});
     // show the layer button
 	showHeatLayer.addEventListener('click', async () => {
-
+		isHeatmapLayerVisibile = true
 		const selectedTime = timeInput.value;
 		const selectedPollutant = pollutantInput.value;
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
@@ -817,6 +817,7 @@ map.on("load", async function () {
 		}
 
 		
+		
 		map.setLayoutProperty(layerId, 'visibility', 'visible');
 	    hideHeatLayer.style.display = 'block';//show the hide layer button
     	showHeatLayer.style.display = 'none'; // hide the show layer button
@@ -824,6 +825,7 @@ map.on("load", async function () {
 
 		// Hide Layer Button
 	hideHeatLayer.addEventListener('click', () => {
+		isHeatmapLayerVisibile = false
 		const selectedTime = timeInput.value;
 		const selectedPollutant = pollutantInput.value;
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
@@ -938,7 +940,7 @@ map.on("load", async function () {
 		var sofialayerID = 'sofia-area-layer'
 		var features = map.queryRenderedFeatures(e.point, {layers: [sofialayerID]}); 
 
-		if (features.length > 0) {
+		if (features.length > 0 && !isHeatmapLayerVisibile) {
             var cordinates = map.unproject(e.point);
             var pollutantValues = getpollutantValues(); // random value generator for all the values
 			var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // html content of the popup
@@ -965,7 +967,7 @@ map.on("load", async function () {
 	  ];
   
 	  let features = map.queryRenderedFeatures(bbox, {
-		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer', "airquality-heat-layer"], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
+		layers: ["TEMP-layer", "NO2-layer", "SO2-layer", "HUMIDITY-layer", 'ppl_lsum-layer', 'ppl_lsum-layer'], //, 'PeopleLMed-layer', 'PeopleLMin-layer'
 	  });
   
 	  if (map.getLayer("selected-sensor")) {
