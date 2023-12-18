@@ -488,6 +488,21 @@ plotOption(activeSource, 'TEMP', selectedTime, selectedSensor)
 		selectedSensorChart.setOption(selectedOption)
 });
 
+// Function to get the value at specific coordinates
+const getValueAtCoordinates = (coordinates, geojsonURL) => {
+
+    const features = geojsonURL.features;
+
+    // Find the closest feature to the clicked coordinates
+    const closestFeature = turf.nearestPoint(coordinates, { type: 'FeatureCollection', features });
+
+    // Extract the value from the closest feature
+    const clickedValue = closestFeature.properties.value;
+
+    return clickedValue;
+}
+
+
 
 
 map.on("load", async function () {
@@ -753,12 +768,13 @@ map.on("load", async function () {
 		const selectedPollutant = pollutantInput.value;
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
-
+		const response = await fetch(geoJsonUrl);
+		const geoJsonData = await response.json();
+		
+		
+		// If the layer doesn't exist, add it
 		if (!map.getLayer(layerId)) {
-			// If the layer doesn't exist, add it
-			const response = await fetch(geoJsonUrl);
-			const geoJsonData = await response.json();
-	
+
 			// Extract points from GeoJSON features
 			const points = geoJsonData.features.map(feature => ({
 				lng: feature.geometry.coordinates[0],
@@ -817,24 +833,25 @@ map.on("load", async function () {
 		}
 
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
-			console.log(layerId)
-			const features = map.queryRenderedFeatures(e.point, { layers: [ layerId ]}); 
-			var cordinates = map.unproject(e.point);
-			console.log(cordinates)
-	
-			if (features.length > 0) {
-				var cordinates = map.unproject(e.point);
-				var popupBox = '<h3 id="popupTitle">Heat Map</h3>' // html content of the popup			
-				popupBox  += '<p id="pollutantName">' + selectedPollutant + ' : '  + '</p>' +
-				'<p id="TimeSelected">' + selectedTime + ' : '  + '</p>' +
-				'<p id="Value">' + features.properties.value + ' : '  + '</p>' 
+			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
+			const features = geoJsonData.features; //the features of the current layer 
+			console.log(features)
+			const closestFeature = turf.nearestPoint([coordinates], { type: 'FeatureCollection', features }); // Find the closest feature to the clicked coordinates
+			const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+			console.log(clickedValue)
+			console.log(valueAtCords)
+
+			const popupBox = '<h3 id="popupTitle">Heat Map</h3>' // html content of the popup			
+			popupBox  += '<p id="pollutantName">' + selectedPollutant + ' : '  + '</p>' +
+			'<p id="TimeSelected">' + selectedTime + ' : '  + '</p>' +
+			'<p id="Value">' + valueAtCords + ' : '  + '</p>' 
 				
 	
-				new mapboxgl.Popup()
-				.setLngLat(cordinates)
-				.setHTML(popupBox)
-				.addTo(map)
-			}
+			new mapboxgl.Popup()
+			.setLngLat(coordinates)
+			.setHTML(popupBox)
+			.addTo(map)
+		
 		})
 
 
