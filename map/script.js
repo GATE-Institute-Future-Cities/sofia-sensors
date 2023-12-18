@@ -818,7 +818,7 @@ map.on("load", async function () {
 
 		
 		map.setLayoutProperty(layerId, 'visibility', 'visible');
-	    hideHeatLayer.style.display = 'block';//show the hide layer 
+	    hideHeatLayer.style.display = 'block';//show the hide layer button
     	showHeatLayer.style.display = 'none'; // hide the show layer button
 	});
 
@@ -936,12 +936,12 @@ map.on("load", async function () {
 
 	map.on('click', function(e){ // this is the popup upon clicking on any point on the map
 		var sofialayerID = 'sofia-area-layer'
-		var features = map.queryRenderedFeatures(e.point, {layers: [sofialayerID]});
+		var features = map.queryRenderedFeatures(e.point, {layers: [sofialayerID]}); 
 
 		if (features.length > 0) {
             var cordinates = map.unproject(e.point);
-            var pollutantValues = getpollutantValues();
-			var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // for the html content of the popup
+            var pollutantValues = getpollutantValues(); // random value generator for all the values
+			var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // html content of the popup
 			for (var pollutant in pollutantValues){
 				popupBox  += '<p id="pollutantName">' + pollutant + ' : '  + '</p>' + 
 
