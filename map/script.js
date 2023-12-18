@@ -488,20 +488,6 @@ plotOption(activeSource, 'TEMP', selectedTime, selectedSensor)
 		selectedSensorChart.setOption(selectedOption)
 });
 
-// Function to get the value at specific coordinates
-const getValueAtCoordinates = (coordinates, geojsonURL) => {
-
-    const features = geojsonURL.features;
-
-    // Find the closest feature to the clicked coordinates
-    const closestFeature = turf.nearestPoint(coordinates, { type: 'FeatureCollection', features });
-
-    // Extract the value from the closest feature
-    const clickedValue = closestFeature.properties.value;
-
-    return clickedValue;
-}
-
 
 
 
