@@ -747,6 +747,7 @@ map.on("load", async function () {
 	});
     // show the layer button
 	showHeatLayer.addEventListener('click', async () => {
+
 		isHeatmapLayerVisibile = true
 		const selectedTime = timeInput.value;
 		const selectedPollutant = pollutantInput.value;
@@ -815,6 +816,29 @@ map.on("load", async function () {
 			map.addLayer(layer);
 
 		}
+
+		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
+			var sofialayerID = 'sofia-area-layer'
+			var features = map.queryRenderedFeatures(e.point, {layers: [sofialayerID]}); 
+	
+			if (features.length > 0 && !isHeatmapLayerVisibile) {
+				var cordinates = map.unproject(e.point);
+				var pollutantValues = getpollutantValues(); // random value generator for all the values
+				var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // html content of the popup
+				for (var pollutant in pollutantValues){
+					popupBox  += '<p id="pollutantName">' + pollutant + ' : '  + '</p>' + 
+	
+					'<p>' + pollutantValues[pollutant].smaller + ' - ' +
+					pollutantValues[pollutant].bigger + ' (EST: ' +
+					pollutantValues[pollutant].average + ') </p>'
+				}
+	
+				new mapboxgl.Popup()
+				.setLngLat(cordinates)
+				.setHTML(popupBox)
+				.addTo(map)
+			}
+		})
 
 		
 		
