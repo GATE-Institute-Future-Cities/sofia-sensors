@@ -752,7 +752,7 @@ map.on("load", async function () {
 		isHeatmapLayerVisibile = true
 		const selectedTime = timeInput.value;
 		const selectedPollutant = pollutantInput.value;
-		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
+		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}-layer`;
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 		const response = await fetch(geoJsonUrl);
 		const geoJsonData = await response.json();
@@ -819,20 +819,13 @@ map.on("load", async function () {
 		}
 
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
-			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
-			const features = geoJsonData.features; //the features of the current layer 
-			console.log(features)
-			const closestFeature = turf.nearestPoint([coordinates], { type: 'FeatureCollection', features }); // Find the closest feature to the clicked coordinates
-			const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
-			console.log(clickedValue)
-			console.log(valueAtCords)
 
-			const popupBox = '<h3 id="popupTitle">Heat Map</h3>' // html content of the popup			
-			popupBox  += '<p id="pollutantName">' + selectedPollutant + ' : '  + '</p>' +
-			'<p id="TimeSelected">' + selectedTime + ' : '  + '</p>' +
-			'<p id="Value">' + valueAtCords + ' : '  + '</p>' 
-				
-	
+			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
+			const features = geoJsonData.features; //the features of the current layer
+			
+			const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
+			const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+			`
 			new mapboxgl.Popup()
 			.setLngLat(coordinates)
 			.setHTML(popupBox)
