@@ -824,12 +824,15 @@ map.on("load", async function () {
 			}
 			
 			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
-			const clickedCoords = [coordinates.lng, coordinates.lat]
-			const polygon = turf.polygon(targetedArea);// Turf.js polygon from the coordinates in the targeted area
-			const isInside = turf.booleanPointInPolygon(clickedCoords, targetedArea);
+			const clickedCoords = [coordinates.lng, coordinates.lat] 
 
-			console.log(clickedCoords)
-			if(isInside){
+	//		const clicledPoint = turf.point(clickedCoords)// Turf point from the clicked coordinates
+	//		const polygon = turf.polygon(targetedArea);// Turf polygon from the coordinates in the targeted area
+	//		const isInside = turf.booleanPointInPolygon(clicledPoint, polygon);
+
+		//	console.log(polygon)
+		//	console.log(clicledPoint)
+		//	if(isInside){
 				const features = geoJsonData.features; //the features of the current layer
 				
 				const closestFeature = turf.nearestPoint(clickedCoords, { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
@@ -839,7 +842,7 @@ map.on("load", async function () {
 		
 	
 				const popupBox = `<h3 id="popupTitle">Heat Map</h3>
-				<p id="pollutantName">Selected Pollutant: ${selectedPollutant}</p>
+				<p id="pollutantName">Selected Pollutant: ${selectedPollutant.text}</p>
 				<p id="selectedTime">Selected Time: ${selectedTime}</p>
 				<p id="coordinates">Coordinates: ${coordinates}</p>
 				<p id="value">Value: ${clickedValue}</p>
@@ -849,7 +852,7 @@ map.on("load", async function () {
 				.setHTML(popupBox)
 				.addTo(map)
 
-			}
+		//	}
 		
 		})
 
