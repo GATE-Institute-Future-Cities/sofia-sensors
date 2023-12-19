@@ -818,13 +818,21 @@ map.on("load", async function () {
 
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
 			
+			const targetedArea = []// getting the cords in a list instead of a dict
+			for(const cord of interpolatedheatCoords){  
+				targetedArea.push([cord.lat, cord.lon])
+			}
+			
 			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
-			const isInside = turf.booleanPointInPolygon(coordinates, interpolatedheatCoords);
+			const clickedCoords = [coordinates.lng, coordinates.lat]
+			const polygon = turf.polygon(targetedArea);// Turf.js polygon from the coordinates in the targeted area
+			const isInside = turf.booleanPointInPolygon(clickedCoords, targetedArea);
 
+			console.log(clickedCoords)
 			if(isInside){
 				const features = geoJsonData.features; //the features of the current layer
 				
-				const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
+				const closestFeature = turf.nearestPoint(clickedCoords, { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
 				const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
 				console.log(clickedValue)
 				console.log(coordinates)
