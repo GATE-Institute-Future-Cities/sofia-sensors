@@ -769,8 +769,8 @@ map.on("load", async function () {
 			}));
 	
 			const layer = interpolateHeatmapLayer.create({
-				points: points, // the points are cordinates and the values we got from the geojson file
 				layerId: layerId,
+				points: points, // the points are cordinates and the values we got from the geojson file
 				roi: [  // conrdinates for the targeted area in Sofia
 				
 					{ lat: 42.62475099, lon: 23.35468471 },
@@ -817,33 +817,7 @@ map.on("load", async function () {
 			});
 			map.addLayer(layer);
 		}
-
-		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
-
-			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
-			const features = geoJsonData.features; //the features of the current layer
-			
-			const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
-			const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
-			console.log(clickedValue)
-			console.log(coordinates)
 	
-
-			const popupBox = `<h3 id="popupTitle">Heat Map</h3>
-			<p id="pollutantName">Selected Pollutant: ${selectedPollutant}</p>
-			<p id="selectedTime">Selected Time: ${selectedTime}</p>
-			<p id="coordinates">Coordinates: ${coordinates}</p>
-			<p id="value">Value: ${clickedValue}</p>
-			`
-			new mapboxgl.Popup()
-			.setLngLat(coordinates)
-			.setHTML(popupBox)
-			.addTo(map)
-		
-		})
-
-
-		
 		
 		map.setLayoutProperty(layerId, 'visibility', 'visible');
 	    hideHeatLayer.style.display = 'block';//show the hide layer button
@@ -867,6 +841,35 @@ map.on("load", async function () {
 	selectors.forEach(selector => {
 		selector.addEventListener('click', checkAndalert);
 	});
+
+	map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
+
+		if(isHeatmapLayerVisibile){
+
+			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user	
+			var featuress = map.queryRenderedFeatures(e.point, {layers: [layerId]}); 
+	
+			console.log(featuress)
+			
+			const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
+			const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+			console.log(clickedValue)
+			console.log(coordinates)
+	
+	
+			const popupBox = `<h3 id="popupTitle">Heat Map</h3>
+			<p id="pollutantName">Selected Pollutant: ${selectedPollutant}</p>
+			<p id="selectedTime">Selected Time: ${selectedTime}</p>
+			<p id="coordinates">Coordinates: ${coordinates}</p>
+			<p id="value">Value: ${clickedValue}</p>
+			`
+			new mapboxgl.Popup()
+			.setLngLat(coordinates)
+			.setHTML(popupBox)
+			.addTo(map)
+		}
+	
+	})
 	
 
 
