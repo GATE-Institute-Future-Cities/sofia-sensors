@@ -825,6 +825,15 @@ map.on("load", async function () {
 			
 			const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
 			const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+			console.log(clickedValue)
+			console.log(coordinates)
+	
+
+			const popupBox = `<h3 id="popupTitle">Heat Map</h3>
+			<p id="pollutantName">Selected Pollutant: ${selectedPollutant}</p>
+			<p id="selectedTime">Selected Time: ${selectedTime}</p>
+			<p id="coordinates">Coordinates: ${coordinates}</p>
+			<p id="value">Value: ${clickedValue}</p>
 			`
 			new mapboxgl.Popup()
 			.setLngLat(coordinates)
