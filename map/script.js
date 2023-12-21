@@ -789,7 +789,6 @@ map.on("load", async function () {
     // show the layer button
 	showHeatLayer.addEventListener('click', async () => {
 
-		isHeatmapLayerVisibile = true
 		const selectedTime = timeInput.value;
 		const selectedPollutant = pollutantInput.value;
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
@@ -817,42 +816,44 @@ map.on("load", async function () {
 
 
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
-			
-			const targetedArea = []// getting the cords in a list instead of a dict
-			for(const cord of interpolatedheatCoords){  
-				targetedArea.push([cord.lat, cord.lon])
-			}
-			
-			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
-			const clickedCoords = [coordinates.lng, coordinates.lat] 
+			if(isHeatmapLayerVisibile){
 
-	//		const clicledPoint = turf.point(clickedCoords)// Turf point from the clicked coordinates
-	//		const polygon = turf.polygon(targetedArea);// Turf polygon from the coordinates in the targeted area
-	//		const isInside = turf.booleanPointInPolygon(clicledPoint, polygon);
-
-		//	console.log(polygon)
-		//	console.log(clicledPoint)
-		//	if(isInside){
-				const features = geoJsonData.features; //the features of the current layer
+				const targetedArea = []// getting the cords in a list instead of a dict
+				for(const cord of interpolatedheatCoords){  
+					targetedArea.push([cord.lat, cord.lon])
+				}
 				
-				const closestFeature = turf.nearestPoint(clickedCoords, { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
-				const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
-				console.log(clickedValue)
-				console.log(coordinates)
-		
+				const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
+				const clickedCoords = [coordinates.lng, coordinates.lat] 
 	
-				const popupBox = `<h3 id="popupTitle">Heat Map</h3>
-				<p id="pollutantName">Selected Pollutant: ${selectedPollutant.text}</p>
-				<p id="selectedTime">Selected Time: ${selectedTime}</p>
-				<p id="coordinates">Coordinates: ${coordinates}</p>
-				<p id="value">Value: ${clickedValue}</p>
-				`
-				new mapboxgl.Popup()
-				.setLngLat(coordinates)
-				.setHTML(popupBox)
-				.addTo(map)
-
-		//	}
+		//		const clicledPoint = turf.point(clickedCoords)// Turf point from the clicked coordinates
+		//		const polygon = turf.polygon(targetedArea);// Turf polygon from the coordinates in the targeted area
+		//		const isInside = turf.booleanPointInPolygon(clicledPoint, polygon);
+	
+			//	console.log(polygon)
+			//	console.log(clicledPoint)
+			//	if(isInside){
+					const features = geoJsonData.features; //the features of the current layer
+					
+					const closestFeature = turf.nearestPoint(clickedCoords, { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
+					const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+					console.log(clickedValue)
+					console.log(coordinates)
+			
+		
+					const popupBox = `<h3 id="popupTitle">Heat Map</h3>
+					<p id="pollutantName">Selected Pollutant: ${selectedPollutant.text}</p>
+					<p id="selectedTime">Selected Time: ${selectedTime}</p>
+					<p id="coordinates">Coordinates: ${coordinates}</p>
+					<p id="value">Value: ${clickedValue}</p>
+					`
+					new mapboxgl.Popup()
+					.setLngLat(coordinates)
+					.setHTML(popupBox)
+					.addTo(map)
+	
+			//	}
+			}
 		
 		})
 
@@ -861,6 +862,7 @@ map.on("load", async function () {
 		map.setLayoutProperty(layerId, 'visibility', 'visible');
 	    hideHeatLayer.style.display = 'block';//show the hide layer button
     	showHeatLayer.style.display = 'none'; // hide the show layer button
+		isHeatmapLayerVisibile = true
 	});
 
 		// Hide Layer Button
