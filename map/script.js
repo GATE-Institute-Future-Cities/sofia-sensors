@@ -842,8 +842,8 @@ map.on("load", async function () {
 			
 		
 					const popupBox = `<h3 id="popupTitle">Heat Map</h3>
-					<p id="pollutantName">Selected Pollutant: ${selectedPollutant.text}</p>
-					<p id="selectedTime">Selected Time: ${selectedTime}</p>
+					<p id="pollutantName">Selected Pollutant: ${pollutantInput.options[pollutantInput.selectedIndex].text}</p>
+					<p id="selectedTime">Selected Time: ${timeInput.options[timeInput.selectedIndex].text}</p>
 					<p id="coordinates">Coordinates: ${coordinates}</p>
 					<p id="value">Value: ${clickedValue}</p>
 					`
