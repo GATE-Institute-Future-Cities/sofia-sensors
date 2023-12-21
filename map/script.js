@@ -827,7 +827,7 @@ map.on("load", async function () {
 
 			const clicledPoint = turf.point(clickedCoords)// Turf point from the clicked coordinates
 			const polygon = turf.polygon([targetedArea]);// Turf polygon from the coordinates in the targeted area
-			const isInside = turf.booleanPointInPolygon(clicledPoint, polygon); 
+			const isInside = turf.booleanPointInPolygon(clicledPoint, polygon); // returns a boolean whether the click is inside the area or not
 
 			console.log(isInside)
 			if(isHeatmapLayerVisibile && isInside){
