@@ -129,7 +129,7 @@ input[type="text"]:focus {
 }
 
 .mapboxgl-popup-close-button {
-  font-size: 25px;
+  font-size: 30px;
   color: black;
   padding-right: 5px;
 
@@ -142,4 +142,12 @@ input[type="text"]:focus {
 .mapboxgl-popup #pollutantName{
   font-size: 15px;
   color: red;
+}
+
+.mapboxgl-popup p spam{
+  color:red;
+}
+
+.mapboxgl-popup #coordinates spam{
+  display: block;
 }
