@@ -129,7 +129,7 @@ input[type="text"]:focus {
 }
 
 .mapboxgl-popup-close-button {
-  font-size: 30px;
+  font-size: 32px;
   color: black;
   padding-right: 5px;
 
