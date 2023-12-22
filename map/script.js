@@ -469,6 +469,22 @@ const getpollutantValues = () => {  // Get random values for now when clikcing o
 	return pollutants
 }
 
+const checkIfInArea = () =>{
+	const targetedArea = [] // getting the cords in a list instead of a dict
+	for(const cord of interpolatedheatCoords){  
+		targetedArea.push([cord.lon, cord.lat])
+	}
+	
+	const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
+	const clickedCoords = [coordinates.lng, coordinates.lat] 
+
+	const clicledPoint = turf.point(clickedCoords)// Turf point from the clicked coordinates
+	const polygon = turf.polygon([targetedArea]);// Turf polygon from the coordinates in the targeted area
+	const isInside = turf.booleanPointInPolygon(clicledPoint, polygon); // returns a boolean whether the click is inside the area or not
+
+
+}
+
 
 
 
@@ -750,24 +766,24 @@ map.on("load", async function () {
 	  }
 	});
 
-	map.addLayer({
-        'id': 'sofia-area-layer',
-        'type': 'fill',
-        'source': {
-            'type': 'geojson',
-            'data': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Polygon',
-                    'coordinates': [sofiaCoordinates]
-                }
-            }
-        },
-		'paint': {
-            'fill-color': 'rgba(0, 0, 0, 0)', // Fully transparent color
-            'fill-opacity': 0
-        }
-    });
+	// map.addLayer({
+    //     'id': 'sofia-area-layer',
+    //     'type': 'fill',
+    //     'source': {
+    //         'type': 'geojson',
+    //         'data': {
+    //             'type': 'Feature',
+    //             'geometry': {
+    //                 'type': 'Polygon',
+    //                 'coordinates': [sofiaCoordinates]
+    //             }
+    //         }
+    //     },
+	// 	'paint': {
+    //         'fill-color': 'rgba(0, 0, 0, 0)', // Fully transparent color
+    //         'fill-opacity': 0
+    //     }
+    // });
 
 
 
