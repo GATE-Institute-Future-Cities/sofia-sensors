@@ -469,7 +469,8 @@ const getpollutantValues = () => {  // Get random values for now when clikcing o
 	return pollutants
 }
 
-const checkIfInArea = (clickedCoordinates) =>{
+const checkIfInArea = (clickedCoordinates) =>{// a func that checks if the current clicked coords are with in the targeted area we specified in Sofia
+	
 	const targetedArea = [] // getting the cords in a list instead of a dict
 	for(const cord of interpolatedheatCoords){  
 		targetedArea.push([cord.lon, cord.lat])
@@ -767,24 +768,6 @@ map.on("load", async function () {
 	  }
 	});
 
-	// map.addLayer({
-    //     'id': 'sofia-area-layer',
-    //     'type': 'fill',
-    //     'source': {
-    //         'type': 'geojson',
-    //         'data': {
-    //             'type': 'Feature',
-    //             'geometry': {
-    //                 'type': 'Polygon',
-    //                 'coordinates': [sofiaCoordinates]
-    //             }
-    //         }
-    //     },
-	// 	'paint': {
-    //         'fill-color': 'rgba(0, 0, 0, 0)', // Fully transparent color
-    //         'fill-opacity': 0
-    //     }
-    // });
 
 
 
@@ -836,7 +819,7 @@ map.on("load", async function () {
 
 			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
 
-			if(isHeatmapLayerVisibile && checkIfInArea(coordinates)){
+			if(isHeatmapLayerVisibile && checkIfInArea(coordinates)){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
 				console.log(checkIfInArea(coordinates))
 				const features = geoJsonData.features; //the features of the current layer
 				
@@ -986,10 +969,10 @@ map.on("load", async function () {
 
 	map.on('click', function(e){ // this is the popup upon clicking on any point on the map
 
-		const cordinates = map.unproject(e.point);
+		const cordinates = map.unproject(e.point); // current clicked coords
 
-		console.log(checkIfInArea(cordinates))
-		if (checkIfInArea(cordinates) && !isHeatmapLayerVisibile) {
+		if (checkIfInArea(cordinates) && !isHeatmapLayerVisibile) { // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
+
             var pollutantValues = getpollutantValues(); // random value generator for all the values
 			var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // html content of the popup
 			for (var pollutant in pollutantValues){
