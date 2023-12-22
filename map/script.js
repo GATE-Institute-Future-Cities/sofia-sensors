@@ -475,7 +475,7 @@ const checkIfInArea = (clickedCoordinates) =>{
 		targetedArea.push([cord.lon, cord.lat])
 	}
 	
-	const clickedCoords = [coordinates.lng, coordinates.lat] 
+	const clickedCoords = [clickedCoordinates.lng, clickedCoordinates.lat] 
 
 	const clicledPoint = turf.point(clickedCoords)// Turf point from the clicked coordinates
 	const polygon = turf.polygon([targetedArea]);// Turf polygon from the coordinates in the targeted area
@@ -836,12 +836,11 @@ map.on("load", async function () {
 
 			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
 
-			
 			if(isHeatmapLayerVisibile && checkIfInArea(coordinates)){
-				console.log(isInside)
+				console.log(checkIfInArea(coordinates))
 				const features = geoJsonData.features; //the features of the current layer
 				
-				const closestFeature = turf.nearestPoint(clickedCoords, { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
+				const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
 				const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
 		
 	
@@ -850,8 +849,8 @@ map.on("load", async function () {
 				<p id="singlePollutant">Selected Pollutant: <spam>${pollutantInput.options[pollutantInput.selectedIndex].text}</spam></p>
 				<p id="singleTime">Selected Time: <spam>${timeInput.options[timeInput.selectedIndex].text}</spam></p>
 				<p id="coordinates">Coordinates: 
-				<spam>lng(${coordinates.lng.toFixed(7)})</spam>
-				<spam>lat(${coordinates.lat.toFixed(7)})</spam>
+				<spam>lng(${coordinates.lng})</spam>
+				<spam>lat(${coordinates.lat})</spam>
 				</p>
 				`
 				new mapboxgl.Popup()
