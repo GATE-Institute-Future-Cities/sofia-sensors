@@ -843,8 +843,8 @@ map.on("load", async function () {
 				<p id="singlePollutant">Selected Pollutant: <spam>${pollutantInput.options[pollutantInput.selectedIndex].text}</spam></p>
 				<p id="singleTime">Selected Time: <spam>${timeInput.options[timeInput.selectedIndex].text}</spam></p>
 				<p id="coordinates">Coordinates: 
-				<spam>lng(${coordinates.lng})</spam>
-				<spam>lat(${coordinates.lat})</spam>
+				<spam>lng(${coordinates.lng.toFixed(7)})</spam>
+				<spam>lat(${coordinates.lat.toFixed(7)})</spam>
 				</p>
 				`
 				new mapboxgl.Popup()
