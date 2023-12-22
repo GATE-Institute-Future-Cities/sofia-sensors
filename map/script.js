@@ -836,9 +836,9 @@ map.on("load", async function () {
 
 			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
 
-			console.log(isInside)
-			if(isHeatmapLayerVisibile && isInside){
-
+			
+			if(isHeatmapLayerVisibile && checkIfInArea(coordinates)){
+				console.log(isInside)
 				const features = geoJsonData.features; //the features of the current layer
 				
 				const closestFeature = turf.nearestPoint(clickedCoords, { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
