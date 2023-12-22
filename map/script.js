@@ -985,8 +985,10 @@ map.on("load", async function () {
 	}, false);
 
 	map.on('click', function(e){ // this is the popup upon clicking on any point on the map
-		var cordinates = map.unproject(e.point);
 
+		const cordinates = map.unproject(e.point);
+
+		console.log(checkIfInArea(cordinates))
 		if (checkIfInArea(cordinates) && !isHeatmapLayerVisibile) {
             var pollutantValues = getpollutantValues(); // random value generator for all the values
 			var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // html content of the popup
