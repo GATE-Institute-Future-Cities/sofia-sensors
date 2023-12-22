@@ -469,18 +469,19 @@ const getpollutantValues = () => {  // Get random values for now when clikcing o
 	return pollutants
 }
 
-const checkIfInArea = () =>{
+const checkIfInArea = (clickedCoordinates) =>{
 	const targetedArea = [] // getting the cords in a list instead of a dict
 	for(const cord of interpolatedheatCoords){  
 		targetedArea.push([cord.lon, cord.lat])
 	}
 	
-	const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
 	const clickedCoords = [coordinates.lng, coordinates.lat] 
 
 	const clicledPoint = turf.point(clickedCoords)// Turf point from the clicked coordinates
 	const polygon = turf.polygon([targetedArea]);// Turf polygon from the coordinates in the targeted area
 	const isInside = turf.booleanPointInPolygon(clicledPoint, polygon); // returns a boolean whether the click is inside the area or not
+
+	return isInside
 
 
 }
@@ -832,18 +833,8 @@ map.on("load", async function () {
 
 
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
-			
-			const targetedArea = [] // getting the cords in a list instead of a dict
-			for(const cord of interpolatedheatCoords){  
-				targetedArea.push([cord.lon, cord.lat])
-			}
-			
-			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
-			const clickedCoords = [coordinates.lng, coordinates.lat] 
 
-			const clicledPoint = turf.point(clickedCoords)// Turf point from the clicked coordinates
-			const polygon = turf.polygon([targetedArea]);// Turf polygon from the coordinates in the targeted area
-			const isInside = turf.booleanPointInPolygon(clicledPoint, polygon); // returns a boolean whether the click is inside the area or not
+			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
 
 			console.log(isInside)
 			if(isHeatmapLayerVisibile && isInside){
