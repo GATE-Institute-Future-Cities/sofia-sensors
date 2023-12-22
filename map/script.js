@@ -985,11 +985,9 @@ map.on("load", async function () {
 	}, false);
 
 	map.on('click', function(e){ // this is the popup upon clicking on any point on the map
-		var sofialayerID = 'sofia-area-layer'
-		var features = map.queryRenderedFeatures(e.point, {layers: [sofialayerID]}); 
+		var cordinates = map.unproject(e.point);
 
-		if (features.length > 0 && !isHeatmapLayerVisibile) {
-            var cordinates = map.unproject(e.point);
+		if (checkIfInArea(cordinates) && !isHeatmapLayerVisibile) {
             var pollutantValues = getpollutantValues(); // random value generator for all the values
 			var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // html content of the popup
 			for (var pollutant in pollutantValues){
