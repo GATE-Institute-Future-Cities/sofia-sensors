@@ -482,7 +482,7 @@ const checkIfInArea = (clickedCoordinates) =>{// a func that checks if the curre
 	const polygon = turf.polygon([targetedArea]);// Turf polygon from the coordinates in the targeted area
 	const isInside = turf.booleanPointInPolygon(clicledPoint, polygon); // returns a boolean whether the click is inside the area or not
 
-	return isInside
+	return isInside //boolean TRUE/FALSE
 
 
 }
@@ -810,6 +810,9 @@ map.on("load", async function () {
 			roi: interpolatedheatCoords, // Coords of the targerted area we want
 			framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
 			opacity:0.4, // the intensity of the colors
+			p:2,
+			valueToColor: 1.4
+
 
 		});
 		map.addLayer(layer);
