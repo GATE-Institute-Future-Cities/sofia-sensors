@@ -87,6 +87,12 @@ const interpolatedheatCoords = [  // conrdinates for the targeted area in Sofia 
 { lat: 42.62475099, lon: 23.35468471 }
 ];
 
+const customValueToColor = `
+  vec3 customValueToColor(float value) {
+    return vec3(0.0, 1.0 - value, value);
+  }
+`;
+
 
 const fieldSelectArray = {
   "airthings": `<option value="TEMP">Temperature</option>
@@ -811,7 +817,7 @@ map.on("load", async function () {
 			framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
 			opacity:0.4, // the intensity of the colors
 			p:2,
-			valueToColor: 1.4
+			valueToColor: customValueToColor
 
 
 		});
