@@ -971,8 +971,11 @@ map.on("load", async function () {
 	map.on('click', function(e){ // this is the popup upon clicking on any point on the map
 
 		const cordinates = map.unproject(e.point); // current clicked coords
+		const features = map.queryRenderedFeatures(e.point);
+		const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
+		console.log(features)
 
-		if (checkIfInArea(cordinates) && !isHeatmapLayerVisibile) { // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
+		if (checkIfInArea(cordinates) && !isHeatmapLayerVisibile && sensorsSource != 'sensorsCoords') { // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area and if the source is different from the sensors coords
 
             var pollutantValues = getpollutantValues(); // random value generator for all the values
 			var popupBox = '<h3 id="popupTitle">Pollutants</h3>' // html content of the popup
