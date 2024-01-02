@@ -38,13 +38,6 @@ const sourceArray = {
   "citylab":  ['ppl_lsum', 'ppl_rsum'],
 };
 var isHeatmapLayerVisibile = false
-var sofiaCoordinates = [
-	[23.181467, 42.563938],
-	[23.427078, 42.563938],
-	[23.427078, 42.768658],
-	[23.181467, 42.768658],
-	[23.181467, 42.563938]
-];
 
 const interpolatedheatCoords = [  // conrdinates for the targeted area in Sofia so that we use it in the interpolated heat map layer
 			
@@ -817,7 +810,6 @@ map.on("load", async function () {
 			framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
 			opacity:0.4, // the intensity of the colors
 			p:2,
-			valueToColor: customValueToColor
 
 
 		});
@@ -860,7 +852,7 @@ map.on("load", async function () {
 		map.setLayoutProperty(layerId, 'visibility', 'visible');
 	    hideHeatLayer.style.display = 'block';//show the hide layer button
     	showHeatLayer.style.display = 'none'; // hide the show layer button
-		isHeatmapLayerVisibile = true
+		isHeatmapLayerVisibile = true // set the visibility to true
 	});
 
 		// Hide Layer Button
