@@ -821,10 +821,9 @@ map.on("load", async function () {
 			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
 			const features = map.queryRenderedFeatures(e.point);
 			const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
-			console.log(sensorsSource)
 
 			if(isHeatmapLayerVisibile && checkIfInArea(coordinates) && sensorsSource != 'sensorsCoords'){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
-				console.log(checkIfInArea(coordinates))
+
 				const features = geoJsonData.features; //the features of the current layer
 				
 				const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
@@ -976,7 +975,6 @@ map.on("load", async function () {
 		const cordinates = map.unproject(e.point); // current clicked coords
 		const features = map.queryRenderedFeatures(e.point);
 		const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
-		console.log(features)
 
 		if (checkIfInArea(cordinates) && !isHeatmapLayerVisibile && sensorsSource != 'sensorsCoords') { // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area and if the source is different from the sensors coords
 
