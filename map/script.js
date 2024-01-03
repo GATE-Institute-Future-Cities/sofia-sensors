@@ -819,8 +819,11 @@ map.on("load", async function () {
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
 
 			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
+			const features = map.queryRenderedFeatures(e.point);
+			const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
+			console.log(sensorsSource)
 
-			if(isHeatmapLayerVisibile && checkIfInArea(coordinates)){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
+			if(isHeatmapLayerVisibile && checkIfInArea(coordinates) && sensorsSource != 'sensorsCoords'){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
 				console.log(checkIfInArea(coordinates))
 				const features = geoJsonData.features; //the features of the current layer
 				
