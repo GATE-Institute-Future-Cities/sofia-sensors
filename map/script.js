@@ -774,8 +774,8 @@ map.on("load", async function () {
 
 	addLabelLayer(map, "bus-stop", "busStopSource", "name", '#8a8888',  visibility='none');
 	addLabelLayer(map, "subway", "subwaySource", "name", '#737272',  visibility='none');
-	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 	addLabelLayer(map, "citylab", "sensorsCityLabCoords", "deviceId", '#424242',visibility='none');
+	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 
 	
 	  // Toggle visibility of the heatmap form
@@ -794,26 +794,30 @@ map.on("load", async function () {
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 		const response = await fetch(geoJsonUrl);
 		const geoJsonData = await response.json();
+
+		if(!map.getLayer(layerId)){
+			
+			// Extract points from GeoJSON features
+			const points = geoJsonData.features.map(feature => ({
+				lng: feature.geometry.coordinates[0],
+				lat: feature.geometry.coordinates[1],
+				val: feature.properties.value,
+			}));
 	
+			const layer = interpolateHeatmapLayer.create({
+				layerId: layerId,
+				points: points, // the points are cordinates and the values we got from the geojson file
+				roi: interpolatedheatCoords, // Coords of the targerted area we want
+				framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
+				opacity:0.4, // the intensity of the colors
+				p:2,
+	
+	
+			});
+			map.addLayer(layer);
 
-		// Extract points from GeoJSON features
-		const points = geoJsonData.features.map(feature => ({
-			lng: feature.geometry.coordinates[0],
-			lat: feature.geometry.coordinates[1],
-			val: feature.properties.value,
-		}));
-
-		const layer = interpolateHeatmapLayer.create({
-			layerId: layerId,
-			points: points, // the points are cordinates and the values we got from the geojson file
-			roi: interpolatedheatCoords, // Coords of the targerted area we want
-			framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
-			opacity:0.4, // the intensity of the colors
-			p:2,
-
-
-		});
-		map.addLayer(layer);
+		}
+	
 
 
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
@@ -1042,6 +1046,7 @@ map.on("load", async function () {
 		  },
 		  "filter": ["==", 'deviceId', selectedSensor],
 		});
+		map.moveLayer('selected-sensor', null);
   
 	  } else {
 		sensorBlock.classList.add("hidden");
