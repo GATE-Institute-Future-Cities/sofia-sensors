@@ -822,9 +822,9 @@ map.on("load", async function () {
 	    hideHeatLayer.style.display = 'block';//show the hide layer button
     	showHeatLayer.style.display = 'none'; // hide the show layer button
 		isHeatmapLayerVisibile = true // set the visibility to true
-		map.setLayoutProperty('airthings-label', 'visibility', 'none'); // 'null' means move to the top
+		map.moveLayer(`${selector.value}-layer`, null)
 
-
+		console.log(selector.value)
 
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
 
