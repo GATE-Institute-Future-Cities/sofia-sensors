@@ -822,7 +822,9 @@ map.on("load", async function () {
 	    hideHeatLayer.style.display = 'block';//show the hide layer button
     	showHeatLayer.style.display = 'none'; // hide the show layer button
 		isHeatmapLayerVisibile = true // set the visibility to true
-		map.moveLayer(`${selector.value}-layer`, null)
+		map.moveLayer(`${selector.value}-layer`, null) // this is for the sensors to be always the top layer for now i have to set it based on the current active pollutant becuase they are in the geojon data
+		map.moveLayer('airthings-label', null)
+		map.moveLayer('citylab-label', null)
 
 		console.log(selector.value)
 
