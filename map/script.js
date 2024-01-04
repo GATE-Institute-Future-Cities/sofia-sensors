@@ -817,7 +817,13 @@ map.on("load", async function () {
 			map.addLayer(layer);
 
 		}
-	
+		
+		map.setLayoutProperty(layerId, 'visibility', 'visible');
+	    hideHeatLayer.style.display = 'block';//show the hide layer button
+    	showHeatLayer.style.display = 'none'; // hide the show layer button
+		isHeatmapLayerVisibile = true // set the visibility to true
+		map.setLayoutProperty('airthings-label', 'visibility', 'none'); // 'null' means move to the top
+
 
 
 		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
@@ -825,6 +831,7 @@ map.on("load", async function () {
 			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
 			const features = map.queryRenderedFeatures(e.point);
 			const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
+
 
 			if(isHeatmapLayerVisibile && checkIfInArea(coordinates) && sensorsSource != 'sensorsCoords'){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
 
@@ -853,12 +860,6 @@ map.on("load", async function () {
 		
 		})
 
-
-
-		map.setLayoutProperty(layerId, 'visibility', 'visible');
-	    hideHeatLayer.style.display = 'block';//show the hide layer button
-    	showHeatLayer.style.display = 'none'; // hide the show layer button
-		isHeatmapLayerVisibile = true // set the visibility to true
 	});
 
 		// Hide Layer Button
