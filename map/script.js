@@ -780,7 +780,7 @@ map.on("load", async function () {
 	
 	showHeatLayer.addEventListener('click', async () => {
 		var timeHour = new Date(slider.value).getHours()
-		var selectedTime = (timeHour < 10 ? `0${timeHour}:00`: `${timeHour}:00`)
+		var selectedTime = (timeHour < 10 ? `0${timeHour}00`: `${timeHour}00`)
 		var selectedPollutant = selector.value
 		console.log(selectedTime)
 		console.log(selectedPollutant)
@@ -788,83 +788,92 @@ map.on("load", async function () {
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
 		
-		if(!geoJsonUrl){
-			throw new Error("This Item currently dosen't have any data")
-		}
-		
-		const response = await fetch(geoJsonUrl);
-		const geoJsonData = await response.json();
-
-		if(!map.getLayer(layerId)){
-			
-			// Extract points from GeoJSON features
-			const points = geoJsonData.features.map(feature => ({
-				lng: feature.geometry.coordinates[0],
-				lat: feature.geometry.coordinates[1],
-				val: feature.properties.value,
-			}));
+		try {
+			const response = await fetch(geoJsonUrl);
 	
-			const layer = interpolateHeatmapLayer.create({
-				layerId: layerId,
-				points: points, // the points are cordinates and the values we got from the geojson file
-				roi: interpolatedheatCoords, // Coords of the targerted area we want
-				framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
-				opacity:0.4, // the intensity of the colors
-				p:2,
-	
-	
-			});
-			map.addLayer(layer);
-
-		}
-		
-		map.setLayoutProperty(layerId, 'visibility', 'visible');
-		isHeatmapLayerVisibile = true // set the visibility to true
-
-
-		console.log(selector.value)
-
-		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
-
-			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
-			const features = map.queryRenderedFeatures(e.point);
-			const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
-
-
-			if(isHeatmapLayerVisibile && checkIfInArea(coordinates) && sensorsSource != 'sensorsCoords'){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
-
-				const features = geoJsonData.features; //the features of the current layer
-				
-				const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
-				const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
-		
-	
-				const popupBox = `<h3 id="popupTitle">Heat Map</h3>
-				<p id="value">Value: <spam>${clickedValue}</spam></p>
-				<p id="singlePollutant">Selected Pollutant: <spam>${pollutantInput.options[pollutantInput.selectedIndex].text}</spam></p>
-				<p id="singleTime">Selected Time: <spam>${timeInput.options[timeInput.selectedIndex].text}</spam></p>
-				<p id="coordinates">Coordinates: 
-				<spam>lng(${coordinates.lng})</spam>
-				<spam>lat(${coordinates.lat})</spam>
-				</p>
-				`
-				new mapboxgl.Popup()
-				.setLngLat(coordinates)
-				.setHTML(popupBox)
-				.addTo(map)
-	
-			
+			if (!response.ok) {
+				// Handle non-successful response (e.g., 404 Not Found)
+				alert("This item currently doesn't have any data");
+				return;
 			}
+	
+			const geoJsonData = await response.json();
+
+			if(!map.getLayer(layerId)){
+			
+				// Extract points from GeoJSON features
+				const points = geoJsonData.features.map(feature => ({
+					lng: feature.geometry.coordinates[0],
+					lat: feature.geometry.coordinates[1],
+					val: feature.properties.value,
+				}));
 		
-		})
+				const layer = interpolateHeatmapLayer.create({
+					layerId: layerId,
+					points: points, // the points are cordinates and the values we got from the geojson file
+					roi: interpolatedheatCoords, // Coords of the targerted area we want
+					framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
+					opacity:0.4, // the intensity of the colors
+					p:2,
+		
+		
+				});
+				map.addLayer(layer);
+	
+			}
+			
+			map.setLayoutProperty(layerId, 'visibility', 'visible');
+			isHeatmapLayerVisibile = true // set the visibility to true
+	
+	
+
+	
+			map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
+	
+				const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
+				const features = map.queryRenderedFeatures(e.point);
+				const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
+	
+	
+				if(isHeatmapLayerVisibile && checkIfInArea(coordinates) && sensorsSource != 'sensorsCoords'){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
+	
+					const features = geoJsonData.features; //the features of the current layer
+					
+					const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
+					const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+			
+		
+					const popupBox = `<h3 id="popupTitle">Heat Map</h3>
+					<p id="value">Value: <spam>${clickedValue}</spam></p>
+					<p id="singlePollutant">Selected Pollutant: <spam>${pollutantInput.options[pollutantInput.selectedIndex].text}</spam></p>
+					<p id="singleTime">Selected Time: <spam>${timeInput.options[timeInput.selectedIndex].text}</spam></p>
+					<p id="coordinates">Coordinates: 
+					<spam>lng(${coordinates.lng})</spam>
+					<spam>lat(${coordinates.lat})</spam>
+					</p>
+					`
+					new mapboxgl.Popup()
+					.setLngLat(coordinates)
+					.setHTML(popupBox)
+					.addTo(map)
+		
+				
+				}
+			
+			})
+
+		} catch (error) {
+			console.error("Error fetching GeoJSON data:", error);
+		}
 
 	});
 
 		// Hide Layer Button
 	hideHeatLayer.addEventListener('click', () => {
 		isHeatmapLayerVisibile = false
-		const selectedTime = timeInput.value;
-		const selectedPollutant = pollutantInput.value;
+		var timeHour = new Date(slider.value).getHours()
+		var selectedTime = (timeHour < 10 ? `0${timeHour}00`: `${timeHour}00`)
+		var selectedPollutant = selector.value
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 
 		
