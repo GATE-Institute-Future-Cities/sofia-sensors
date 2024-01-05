@@ -84,26 +84,6 @@ input[type="text"]:focus {
 }
 
 
-/* #showHeatmap,
-#hideHeatmap {
-  position: absolute; 
-  background: #fff;
-  border-radius: 3px;
-  border: 2px solid rgba(0, 0, 0, 0.4);
-  font-family: 'Open Sans', sans-serif;
-  width: 90%; 
-  margin: 8px 10px 8px 10px;
-  
-} */
-
-
-/* #showHeatmap:hover,
-#hideHeatmap:hover,
-#heatMapbutton:hover {
-  background: rgb(14, 73, 137);
-  color: #fff;
-} */
-
 .mapboxgl-popup {
   font-family: 'Open Sans', sans-serif;
   border-radius: 4px;
