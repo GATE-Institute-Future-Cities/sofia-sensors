@@ -14,8 +14,8 @@ const listContainer = document.querySelector('.sensordata__list');
 const legendBuilding = document.querySelector('.building-legend');
 const heatmaptoggleBtn = document.getElementById('heatMapbutton');
 const toggleFormBtn = document.getElementById('dataForm');
-const showHeatLayer = document.getElementById('showHeatmap');
-const hideHeatLayer = document.getElementById('hideHeatmap');
+const showHeatLayer = document.getElementById('showBTN'); // old button id= showHeatmap
+const hideHeatLayer = document.getElementById('hideBTN');  // old button id= hideHeatmap
 let timeInput = document.getElementById('timeframe');
 let pollutantInput = document.getElementById('airQuality');
 let selectors = document.querySelectorAll('.form-control')
@@ -778,109 +778,198 @@ map.on("load", async function () {
 	addLabelLayer(map, "airthings", "sensorsCoords", "deviceId", '#424242');
 
 	
-	  // Toggle visibility of the heatmap form
-	heatmaptoggleBtn.addEventListener('click', () => {
-		const isFormVisible = toggleFormBtn.style.display === 'block';
-		toggleFormBtn.style.display = isFormVisible ? 'none' : 'block';
-		heatmaptoggleBtn.innerText = isFormVisible ? 'Heat Map' : 'Cancel';
+	//   // Toggle visibility of the heatmap form
+	// heatmaptoggleBtn.addEventListener('click', () => {
+	// 	const isFormVisible = toggleFormBtn.style.display === 'block';
+	// 	toggleFormBtn.style.display = isFormVisible ? 'none' : 'block';
+	// 	heatmaptoggleBtn.innerText = isFormVisible ? 'Heat Map' : 'Cancel';
 		
-	});
-    // show the layer button
+	// });
+    // // show the layer button
+	// showHeatLayer.addEventListener('click', async () => {
+
+	// 	const selectedTime = timeInput.value;
+	// 	const selectedPollutant = pollutantInput.value;
+	// 	const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
+	// 	const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
+	// 	const response = await fetch(geoJsonUrl);
+	// 	const geoJsonData = await response.json();
+
+	// 	if(!map.getLayer(layerId)){
+			
+	// 		// Extract points from GeoJSON features
+	// 		const points = geoJsonData.features.map(feature => ({
+	// 			lng: feature.geometry.coordinates[0],
+	// 			lat: feature.geometry.coordinates[1],
+	// 			val: feature.properties.value,
+	// 		}));
+	
+	// 		const layer = interpolateHeatmapLayer.create({
+	// 			layerId: layerId,
+	// 			points: points, // the points are cordinates and the values we got from the geojson file
+	// 			roi: interpolatedheatCoords, // Coords of the targerted area we want
+	// 			framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
+	// 			opacity:0.4, // the intensity of the colors
+	// 			p:2,
+	
+	
+	// 		});
+	// 		map.addLayer(layer);
+
+	// 	}
+		
+	// 	map.setLayoutProperty(layerId, 'visibility', 'visible');
+	//     hideHeatLayer.style.display = 'block';//show the hide layer button
+    // 	showHeatLayer.style.display = 'none'; // hide the show layer button
+	// 	isHeatmapLayerVisibile = true // set the visibility to true
+	// 	map.moveLayer(`${selector.value}-layer`, null) // this is for the sensors to be always the top layer for now i have to set it based on the current active pollutant becuase they are in the geojon data
+	// 	map.moveLayer('airthings-label', null)
+	// 	map.moveLayer('citylab-label', null)
+
+	// 	console.log(selector.value)
+
+	// 	map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
+
+	// 		const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
+	// 		const features = map.queryRenderedFeatures(e.point);
+	// 		const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
+
+
+	// 		if(isHeatmapLayerVisibile && checkIfInArea(coordinates) && sensorsSource != 'sensorsCoords'){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
+
+	// 			const features = geoJsonData.features; //the features of the current layer
+				
+	// 			const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
+	// 			const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+		
+	
+	// 			const popupBox = `<h3 id="popupTitle">Heat Map</h3>
+	// 			<p id="value">Value: <spam>${clickedValue}</spam></p>
+	// 			<p id="singlePollutant">Selected Pollutant: <spam>${pollutantInput.options[pollutantInput.selectedIndex].text}</spam></p>
+	// 			<p id="singleTime">Selected Time: <spam>${timeInput.options[timeInput.selectedIndex].text}</spam></p>
+	// 			<p id="coordinates">Coordinates: 
+	// 			<spam>lng(${coordinates.lng})</spam>
+	// 			<spam>lat(${coordinates.lat})</spam>
+	// 			</p>
+	// 			`
+	// 			new mapboxgl.Popup()
+	// 			.setLngLat(coordinates)
+	// 			.setHTML(popupBox)
+	// 			.addTo(map)
+	
+			
+	// 		}
+		
+	// 	})
+
+	// });
+
+	// 	// Hide Layer Button
+	// hideHeatLayer.addEventListener('click', () => {
+	// 	isHeatmapLayerVisibile = false
+	// 	const selectedTime = timeInput.value;
+	// 	const selectedPollutant = pollutantInput.value;
+	// 	const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
+
+		
+	// 	map.setLayoutProperty(layerId, 'visibility', 'none');//hide layer
+	// 	hideHeatLayer.style.display = 'none'; //hide the hide layer btn
+	// 	showHeatLayer.style.display = 'block'; // show the show layer btn
+	// });
+
+	// //this is for showing an alert when trying visuiles another heatmap layer while there is a visible one
+	// selectors.forEach(selector => {
+	// 	selector.addEventListener('click', checkAndalert);
+	// });
+	
 	showHeatLayer.addEventListener('click', async () => {
 
-		const selectedTime = timeInput.value;
-		const selectedPollutant = pollutantInput.value;
-		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
-		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
-		const response = await fetch(geoJsonUrl);
-		const geoJsonData = await response.json();
-
-		if(!map.getLayer(layerId)){
-			
-			// Extract points from GeoJSON features
-			const points = geoJsonData.features.map(feature => ({
-				lng: feature.geometry.coordinates[0],
-				lat: feature.geometry.coordinates[1],
-				val: feature.properties.value,
-			}));
+			const selectedTime = timeInput.value;
+			const selectedPollutant = pollutantInput.value;
+			const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
+			const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
+			const response = await fetch(geoJsonUrl);
+			const geoJsonData = await response.json();
 	
-			const layer = interpolateHeatmapLayer.create({
-				layerId: layerId,
-				points: points, // the points are cordinates and the values we got from the geojson file
-				roi: interpolatedheatCoords, // Coords of the targerted area we want
-				framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
-				opacity:0.4, // the intensity of the colors
-				p:2,
-	
-	
-			});
-			map.addLayer(layer);
-
-		}
-		
-		map.setLayoutProperty(layerId, 'visibility', 'visible');
-	    hideHeatLayer.style.display = 'block';//show the hide layer button
-    	showHeatLayer.style.display = 'none'; // hide the show layer button
-		isHeatmapLayerVisibile = true // set the visibility to true
-		map.moveLayer(`${selector.value}-layer`, null) // this is for the sensors to be always the top layer for now i have to set it based on the current active pollutant becuase they are in the geojon data
-		map.moveLayer('airthings-label', null)
-		map.moveLayer('citylab-label', null)
-
-		console.log(selector.value)
-
-		map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
-
-			const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
-			const features = map.queryRenderedFeatures(e.point);
-			const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
-
-
-			if(isHeatmapLayerVisibile && checkIfInArea(coordinates) && sensorsSource != 'sensorsCoords'){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
-
-				const features = geoJsonData.features; //the features of the current layer
+			if(!map.getLayer(layerId)){
 				
-				const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
-				const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+				// Extract points from GeoJSON features
+				const points = geoJsonData.features.map(feature => ({
+					lng: feature.geometry.coordinates[0],
+					lat: feature.geometry.coordinates[1],
+					val: feature.properties.value,
+				}));
 		
+				const layer = interpolateHeatmapLayer.create({
+					layerId: layerId,
+					points: points, // the points are cordinates and the values we got from the geojson file
+					roi: interpolatedheatCoords, // Coords of the targerted area we want
+					framebufferFactor: 0.08, // reseloution of the layer the number is between 0-10 the higher the reseloution the slower it gets
+					opacity:0.4, // the intensity of the colors
+					p:2,
+		
+		
+				});
+				map.addLayer(layer);
 	
-				const popupBox = `<h3 id="popupTitle">Heat Map</h3>
-				<p id="value">Value: <spam>${clickedValue}</spam></p>
-				<p id="singlePollutant">Selected Pollutant: <spam>${pollutantInput.options[pollutantInput.selectedIndex].text}</spam></p>
-				<p id="singleTime">Selected Time: <spam>${timeInput.options[timeInput.selectedIndex].text}</spam></p>
-				<p id="coordinates">Coordinates: 
-				<spam>lng(${coordinates.lng})</spam>
-				<spam>lat(${coordinates.lat})</spam>
-				</p>
-				`
-				new mapboxgl.Popup()
-				.setLngLat(coordinates)
-				.setHTML(popupBox)
-				.addTo(map)
+			}
+			
+			map.setLayoutProperty(layerId, 'visibility', 'visible');
+		    hideHeatLayer.style.display = 'block';//show the hide layer button
+			showHeatLayer.style.display = 'none'; // hide the show layer button
+			isHeatmapLayerVisibile = true // set the visibility to true
+
+	
+			console.log(selector.value)
+	
+			map.on('click', function(e){ // this is the popup upon clicking on any point on the map WHILE THE HEATMAP LAYER IS ON RETRIVES INFO ONLY FOR THE SELECTED POLLUTANT
+	
+				const coordinates = map.unproject(e.point); // coordinates of the clicked point from the user
+				const features = map.queryRenderedFeatures(e.point);
+				const sensorsSource = features[0].source // getting the features clicked source so that the popup doesn't show up when clicking on the sensors
+	
+	
+				if(isHeatmapLayerVisibile && checkIfInArea(coordinates) && sensorsSource != 'sensorsCoords'){ // checking if a heatmap layer is active and if the clicked coords are with in the Sofia Area
+	
+					const features = geoJsonData.features; //the features of the current layer
+					
+					const closestFeature = turf.nearestPoint([coordinates.lng, coordinates.lat], { type: 'FeatureCollection', features }); // Find the closest features to the clicked coordinates
+					const clickedValue = closestFeature.properties.value;// Extract the value from the closest feature
+			
+		
+					const popupBox = `<h3 id="popupTitle">Heat Map</h3>
+					<p id="value">Value: <spam>${clickedValue}</spam></p>
+					<p id="singlePollutant">Selected Pollutant: <spam>${pollutantInput.options[pollutantInput.selectedIndex].text}</spam></p>
+					<p id="singleTime">Selected Time: <spam>${timeInput.options[timeInput.selectedIndex].text}</spam></p>
+					<p id="coordinates">Coordinates: 
+					<spam>lng(${coordinates.lng})</spam>
+					<spam>lat(${coordinates.lat})</spam>
+					</p>
+					`
+					new mapboxgl.Popup()
+					.setLngLat(coordinates)
+					.setHTML(popupBox)
+					.addTo(map)
+		
+				
+				}
+			
+			})
+	
+		});
+	
+			// Hide Layer Button
+		hideHeatLayer.addEventListener('click', () => {
+			isHeatmapLayerVisibile = false
+			const selectedTime = timeInput.value;
+			const selectedPollutant = pollutantInput.value;
+			const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 	
 			
-			}
-		
-		})
-
-	});
-
-		// Hide Layer Button
-	hideHeatLayer.addEventListener('click', () => {
-		isHeatmapLayerVisibile = false
-		const selectedTime = timeInput.value;
-		const selectedPollutant = pollutantInput.value;
-		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
-
-		
-		map.setLayoutProperty(layerId, 'visibility', 'none');//hide layer
-		hideHeatLayer.style.display = 'none'; //hide the hide layer btn
-		showHeatLayer.style.display = 'block'; // show the show layer btn
-	});
-
-	//this is for showing an alert when trying visuiles another heatmap layer while there is a visible one
-	selectors.forEach(selector => {
-		selector.addEventListener('click', checkAndalert);
-	});
+			map.setLayoutProperty(layerId, 'visibility', 'none');//hide layer
+			hideHeatLayer.style.display = 'none'; //hide the hide layer btn
+			showHeatLayer.style.display = 'block'; // show the show layer btn
+		});
 	
 
 
