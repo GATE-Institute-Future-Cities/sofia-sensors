@@ -781,9 +781,9 @@ map.on("load", async function () {
 	showHeatLayer.addEventListener('click', async () => {
 		var timeHour = new Date(slider.value).getHours()
 		var selectedTime = (timeHour < 10 ? `0${timeHour}00`: `${timeHour}00`)
-		var selectedPollutant = selector.value
+		var selectedPollutant = selector.value.toLowerCase()/// for now we are converting it to lower case because the static data is saved like this in github
 		console.log(selectedTime)
-		console.log(selectedPollutant)
+		console.log(selectedPollutant.toLowerCase()) /// for now we are converting it to lower case because the static data is saved like this in github
 
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 		const geoJsonUrl = `https://raw.githubusercontent.com/GATE-Institute-Future-Cities/sofia-sensors/master/pollutantsData/${selectedPollutant}geojson/prediction_20231112_${selectedTime}_${selectedPollutant}.geojson`;
@@ -792,8 +792,8 @@ map.on("load", async function () {
 			const response = await fetch(geoJsonUrl);
 	
 			if (!response.ok) {
-				// Handle non-successful response (e.g., 404 Not Found)
-				alert("This item currently doesn't have any data");
+				// if the current selected pollutant and item don't have any data 
+				alert("This pollutant currently doesn't have any data");
 				return;
 			}
 	
@@ -824,7 +824,6 @@ map.on("load", async function () {
 			
 			map.setLayoutProperty(layerId, 'visibility', 'visible');
 			isHeatmapLayerVisibile = true // set the visibility to true
-	
 	
 
 	
@@ -873,13 +872,11 @@ map.on("load", async function () {
 		isHeatmapLayerVisibile = false
 		var timeHour = new Date(slider.value).getHours()
 		var selectedTime = (timeHour < 10 ? `0${timeHour}00`: `${timeHour}00`)
-		var selectedPollutant = selector.value
+		var selectedPollutant = selector.value.toLowerCase()/// for now we are converting it to lower case because the static data is saved like this in github
 		const layerId = `airquality-heat-${selectedPollutant}-${selectedTime}`;
 
 		
 		map.setLayoutProperty(layerId, 'visibility', 'none');//hide layer
-		hideHeatLayer.style.display = 'none'; //hide the hide layer btn
-		showHeatLayer.style.display = 'block'; // show the show layer btn
 	});
 	
 
